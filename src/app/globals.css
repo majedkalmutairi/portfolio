@@ -1,1 +1,160 @@
 @import "tailwindcss";
+
+/*
+ * Dark mode is switched by a `dark` class on <html>, not by the OS setting.
+ * A small script in layout.tsx sets that class before the page paints.
+ */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/*
+ * Design tokens — every visual value the site uses, defined once.
+ * Tailwind turns each `--name` here into a utility class (e.g. `--color-ink` → `bg-ink`,
+ * `--text-section` → `text-section`, `--radius-lg` → `rounded-lg`).
+ */
+@theme {
+  /* The two page colours. Everything else is a gray. */
+  --color-ink: #121212;
+  --color-paper: #ffffff;
+
+  /* No accent colour. Colour on this site only ever belongs to a logo. */
+
+  /* Typeface: Inter (owner's pick, 2026-09-22), self-hosted by next/font which defines
+     --font-inter on <html>. The system stack is only the fallback while it loads. */
+  --font-sans:
+    var(--font-inter), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+  /* Type scale — role-named. Size / line-height / tracking / weight travel together. */
+  --text-name: 1.875rem; /* 30px — the owner's name */
+  --text-name--line-height: 2.25rem;
+  --text-name--letter-spacing: -0.025em;
+  --text-name--font-weight: 600;
+
+  --text-section: 2.125rem; /* 34px — section headings and the hero headline */
+  --text-section--line-height: 2.6875rem;
+  --text-section--letter-spacing: -0.025em;
+  --text-section--font-weight: 300;
+
+  --text-headline: 2.125rem; /* same size as a section heading; kept separate so it can diverge */
+  --text-headline--line-height: 2.6875rem;
+  --text-headline--letter-spacing: -0.025em;
+  --text-headline--font-weight: 300;
+
+  --text-title: 1.5rem; /* 24px — a project's title inside its card */
+  --text-title--line-height: 2rem;
+  --text-title--letter-spacing: -0.025em;
+  --text-title--font-weight: 300;
+
+  --text-body-lg: 1.125rem; /* 18px / 32px — the hero paragraph; airy on purpose */
+  --text-body-lg--line-height: 2rem;
+  --text-body-lg--font-weight: 300;
+
+  --text-body: 0.875rem; /* 14px — descriptions, nav, dates */
+  --text-body--line-height: 1.375rem;
+  --text-body--font-weight: 400;
+
+  --text-micro: 0.6875rem; /* 11px — tracked uppercase labels */
+  --text-micro--line-height: 1rem;
+  --text-micro--letter-spacing: 0.2em;
+  --text-micro--font-weight: 700;
+
+  /* Tracking */
+  --tracking-tight: -0.025em;
+  --tracking-micro: 0.2em;
+  --tracking-mono-label: 0.1em;
+
+  /* Corner radii */
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+
+  /* Motion */
+  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+/*
+ * Theme-dependent roles. These change between light and dark, so they are plain CSS
+ * variables set per theme below, and exposed to Tailwind through `@theme inline` so that
+ * `text-fg`, `border-line`, `bg-surface` work in both themes without a `dark:` prefix.
+ */
+@theme inline {
+  --color-bg: var(--bg);
+  --color-fg: var(--fg);
+  --color-fg-secondary: var(--fg-secondary);
+  --color-fg-muted: var(--fg-muted);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-surface: var(--surface);
+  --color-solid: var(--solid);
+  --color-on-solid: var(--on-solid);
+}
+
+/* Light theme values. Grays are Tailwind's default scale, written out so they read plainly. */
+:root {
+  --bg: var(--color-paper);
+  --fg: oklch(21% 0.034 264.665); /* gray-900 */
+  --fg-secondary: oklch(55.1% 0.027 264.364); /* gray-500 */
+  --fg-muted: oklch(70.7% 0.022 261.325); /* gray-400 */
+  --line: oklch(92.8% 0.006 264.531); /* gray-200 — dashed card borders */
+  --line-strong: oklch(87.2% 0.01 258.338); /* gray-300 — solid chip borders */
+  --surface: oklch(98.5% 0.002 247.839); /* gray-50 — chip and frame backgrounds */
+  --solid: #000000; /* solid buttons */
+  --on-solid: #ffffff;
+  color-scheme: light;
+}
+
+/* Dark theme values. */
+.dark {
+  --bg: var(--color-ink);
+  --fg: #ffffff;
+  --fg-secondary: oklch(70.7% 0.022 261.325); /* gray-400 */
+  --fg-muted: oklch(55.1% 0.027 264.364); /* gray-500 */
+  --line: oklch(37.3% 0.034 259.733); /* gray-700 */
+  --line-strong: oklch(44.6% 0.03 256.802); /* gray-600 */
+  --surface: oklch(21% 0.034 264.665); /* gray-900 */
+  --solid: #ffffff;
+  --on-solid: #000000;
+  color-scheme: dark;
+}
+
+@layer base {
+  html {
+    background-color: var(--bg);
+    color: var(--fg);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  ::selection {
+    background-color: var(--fg);
+    color: var(--bg);
+  }
+
+  /* Keyboard focus ring: same in both themes, only visible for keyboard users. */
+  :focus-visible {
+    outline: 2px solid var(--fg);
+    outline-offset: 3px;
+    border-radius: var(--radius-sm);
+  }
+
+  /* Reduced motion: everything renders in its final state. */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    ::before,
+    ::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+
+    /* Reveal's start state arrives as an inline style from the server; override it. */
+    [data-reveal] {
+      opacity: 1 !important;
+      transform: none !important;
+    }
+  }
+}
