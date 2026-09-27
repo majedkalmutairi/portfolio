@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "eslint",
     "format": "prettier --write .",
-    "shoot": "node scripts/shoot.mjs"
+    "shoot": "node scripts/shoot.mjs",
+    "icons": "node scripts/apple-icon.mjs"
   },
   "dependencies": {
     "lucide-react": "^1.47.0",

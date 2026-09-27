@@ -1,6 +1,8 @@
 import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import { ThemeScript } from "@/components/theme/theme-script";
+import { Footer } from "@/components/layout/footer";
+import { Nav } from "@/components/layout/nav";
 import "./globals.css";
 
 // The site's typeface. next/font downloads it at build time and serves it from our own domain,
@@ -32,7 +34,21 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           <style>{`[data-reveal]{opacity:1!important;transform:none!important}`}</style>
         </noscript>
       </head>
-      <body className="min-h-dvh bg-bg text-fg antialiased">{children}</body>
+      <body className="flex min-h-dvh flex-col bg-bg text-fg antialiased">
+        {/* First thing a keyboard reaches: jump past the nav. Hidden until it has focus. */}
+        <a
+          href="#main"
+          className="fixed top-3 left-3 z-50 -translate-y-20 rounded-md bg-solid px-4 py-2 text-body font-medium text-on-solid focus-visible:translate-y-0"
+        >
+          Skip to content
+        </a>
+        <Nav />
+        {/* tabIndex -1 lets the skip link move focus here; it is not a tab stop itself. */}
+        <main id="main" tabIndex={-1} className="flex-1 outline-none">
+          {children}
+        </main>
+        <Footer />
+      </body>
     </html>
   );
 }

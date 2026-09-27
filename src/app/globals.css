@@ -72,6 +72,7 @@
 
   /* Motion */
   --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+  --ease-in-out-strong: cubic-bezier(0.77, 0, 0.175, 1); /* on-screen movement: the theme wipe */
 }
 
 /*
@@ -119,8 +120,22 @@
   color-scheme: dark;
 }
 
+/* A triangle anchored at the top-right corner that grows until its long edge has passed the
+   bottom-left corner — so the new theme sweeps across the page at 45°. */
+@keyframes theme-wipe {
+  from {
+    clip-path: polygon(100% 0, 100% 0, 100% 0);
+  }
+  to {
+    clip-path: polygon(100% 0, 100% 210%, -110% 0);
+  }
+}
+
 @layer base {
   html {
+    /* Nav links glide to their section; the padding keeps a heading clear of the sticky nav. */
+    scroll-behavior: smooth;
+    scroll-padding-top: 5rem;
     background-color: var(--bg);
     color: var(--fg);
     font-family: var(--font-sans);
@@ -138,6 +153,18 @@
     outline: 2px solid var(--fg);
     outline-offset: 3px;
     border-radius: var(--radius-sm);
+  }
+
+  /* Theme switch (ThemeToggle → View Transitions). The old page stays still underneath; the new
+     one is revealed by a diagonal edge that sweeps from the top-right corner, where the toggle
+     is, to past the bottom-left. Only runs when motion is allowed. */
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none;
+    mix-blend-mode: normal;
+  }
+  ::view-transition-new(root) {
+    animation: theme-wipe 800ms var(--ease-in-out-strong);
   }
 
   /* Reduced motion: everything renders in its final state. */

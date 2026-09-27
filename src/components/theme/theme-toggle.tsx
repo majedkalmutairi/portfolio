@@ -30,6 +30,18 @@ function applyTheme(theme: Theme) {
   }
 }
 
+// The switch itself is animated with the browser's View Transitions: it snapshots the old
+// page, applies the new theme, and globals.css wipes the new one in from the top-right corner.
+// Reduced motion, or a browser without View Transitions, gets the instant switch.
+function switchTheme(theme: Theme) {
+  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (reduce || !document.startViewTransition) {
+    applyTheme(theme);
+    return;
+  }
+  document.startViewTransition(() => applyTheme(theme));
+}
+
 // Sun / moon button. Flips the `dark` class on <html>, remembers the choice in localStorage,
 // and keeps the browser-chrome colour in step.
 export function ThemeToggle({ className = "" }: { className?: string }) {
@@ -39,7 +51,7 @@ export function ThemeToggle({ className = "" }: { className?: string }) {
   return (
     <button
       type="button"
-      onClick={() => applyTheme(theme === "dark" ? "light" : "dark")}
+      onClick={() => switchTheme(theme === "dark" ? "light" : "dark")}
       aria-label={theme === "dark" ? "Switch to light theme" : "Switch to dark theme"}
       className={`inline-flex size-9 items-center justify-center rounded-md text-fg-secondary transition-colors duration-150 hover:text-fg ${className}`}
     >
