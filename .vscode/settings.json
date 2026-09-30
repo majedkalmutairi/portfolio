@@ -1,0 +1,9 @@
+{
+  // VS Code's built-in CSS checker doesn't know Tailwind v4's at-rules (@theme,
+  // @custom-variant, @utility, @source, …) and flags them as "Unknown at rule". This turns
+  // that specific check off; the Tailwind CSS IntelliSense extension covers real CSS mistakes.
+  "css.lint.unknownAtRules": "ignore",
+  "editor.quickSuggestions": {
+    "strings": "on"
+  }
+}
