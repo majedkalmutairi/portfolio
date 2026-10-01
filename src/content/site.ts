@@ -22,11 +22,14 @@ export const site = {
   /** One or two sentences, in the owner's words. */
   researchInterests: undefined as string | undefined,
   /** Footer status line, in the owner's words. */
-  status: undefined as string | undefined,
+  status: "Computer Engineering" as string | undefined,
   /** Footer location. */
   location: "Kuwait",
   /** The 404 page's one line, in the owner's words. */
-  notFoundLine: undefined as string | undefined,
+  notFoundLine:
+    "The page you are looking for might have been removed, had its name changed, or is temporarily unavailable." as
+      | string
+      | undefined,
   email: "majedkhaled0606@gmail.com",
   links: {
     github: "https://github.com/majedkalmutairi",
