@@ -52,8 +52,10 @@ export const projects: Project[] = [
   {
     slug: "dosey",
     name: "Dosey",
+    hook: "A medication and supplement reminder that runs entirely on your iPhone.",
     status: "active",
-    tech: [],
+    role: "Product design, decisions and testing",
+    tech: ["ios", "expo", "testflight"],
     // No source link: the code is private.
     links: {},
     featured: false,
