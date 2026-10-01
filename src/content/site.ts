@@ -20,7 +20,9 @@ export const site = {
   graduation: "Expected 2028",
   gpa: { value: "3.97", scale: "4.0" },
   /** One or two sentences, in the owner's words. */
-  researchInterests: undefined as string | undefined,
+  researchInterests:
+    "I want to understand how a self-driving car tells a pedestrian from another car fast enough to label it as such in its systems." as
+      string | undefined,
   /** Footer status line, in the owner's words. */
   status: "Computer Engineering" as string | undefined,
   /** Footer location. */
@@ -28,8 +30,7 @@ export const site = {
   /** The 404 page's one line, in the owner's words. */
   notFoundLine:
     "The page you are looking for might have been removed, had its name changed, or is temporarily unavailable." as
-      | string
-      | undefined,
+      string | undefined,
   email: "majedkhaled0606@gmail.com",
   links: {
     github: "https://github.com/majedkalmutairi",
