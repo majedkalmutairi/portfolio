@@ -14,10 +14,10 @@ export const site = {
   photo: undefined as { src: string; alt: string } | undefined,
   resume: undefined as string | undefined,
   about:
-    "I'm Majed Almutairi. Software to me is the mind, and hardware is an extension of it. It's like giving software hands to work with, and watching it use them just as you wrote it to. What makes an excellent design is knowing when to change which aspect. I want to learn how to give cameras a mind. If I'm not spending my time coming up with new projects to steal my time, I'm in the gym. I love learning about the new science of min-maxing your time in the gym." as
+    "" as //I'm Majed Almutairi. Software to me is the mind, and hardware is an extension of it. It's like giving software hands to work with, and watching it use them just as you wrote it to. What makes an excellent design is knowing when to change which aspect. I want to learn how to give cameras a mind. If I'm not spending my time coming up with new projects to steal my time, I'm in the gym. I love learning about the new science of min-maxing your time in the gym.
       string | undefined,
   researchInterests:
-    "I want to understand how a self-driving car tells a pedestrian from another car fast enough to label it as such in its systems." as
+    "" as //I want to understand how a self-driving car tells a pedestrian from another car fast enough to label it as such in its systems.
       string | undefined,
   status: "Computer Engineering" as string | undefined,
   location: "Kuwait",
