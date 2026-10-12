@@ -5,14 +5,11 @@ import { cx } from "@/lib/cx";
 
 type ButtonProps = {
   children: ReactNode;
-  /** Where it goes. External links (http…, mailto:) open in a new tab. */
   href?: string;
-  /** `chevron` = "›" (go somewhere on this site) · `external` = "↗" (leaves the site) · `none`. */
   arrow?: "chevron" | "external" | "none";
   className?: string;
 } & Omit<ComponentProps<"button">, "children" | "className">;
 
-// Solid pill button: black on light, white on dark. 16px / 500. The one "heavy" element.
 export function Button({ children, href, arrow = "chevron", className, ...rest }: ButtonProps) {
   const classes = cx(
     "group inline-flex h-12 items-center gap-2 rounded-lg bg-solid px-6 text-base font-medium text-on-solid",

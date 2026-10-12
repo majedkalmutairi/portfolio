@@ -1,14 +1,9 @@
-// Shared by the contact form (in the browser) and /api/contact (on the server): the browser checks
-// first so the visitor gets a quick answer, the server checks again because anyone can skip the form.
-
 export const LIMITS = { name: 100, email: 200, message: 5000 } as const;
 
 export type ContactInput = { name: string; email: string; message: string };
 
-// Deliberately loose: something@something.something, no spaces. The real test is the reply.
 const EMAIL_SHAPE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-/** Returns the cleaned fields, or a sentence saying what is wrong. */
 export function validateContact(
   raw: unknown,
 ): { ok: true; value: ContactInput } | { ok: false; error: string } {

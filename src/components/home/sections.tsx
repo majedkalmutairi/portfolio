@@ -1,6 +1,7 @@
 import { Container } from "@/components/layout/container";
 import { Section } from "@/components/layout/section";
 import { ProjectCard } from "@/components/home/project-card";
+import { Button } from "@/components/ui/button";
 import { DashedCard } from "@/components/ui/dashed-card";
 import { MicroLabel } from "@/components/ui/micro-label";
 import { Pill } from "@/components/ui/pill";
@@ -13,10 +14,8 @@ import { projects } from "@/content/projects";
 import { site } from "@/content/site";
 import { skillGroups } from "@/content/skills";
 
-// The homepage's plain sections. Each one reads its content file and renders nothing at all when
-// it is switched off or empty — so a hidden section is absent from the page, not just invisible.
+const HOME_GRID = 2;
 
-/** Something in progress that isn't a project yet. Off at launch. */
 export function CurrentlyBuildingSection() {
   if (!site.flags.showCurrentlyBuilding || currentlyBuilding.length === 0) return null;
   return (
@@ -45,25 +44,36 @@ export function CurrentlyBuildingSection() {
   );
 }
 
-/** Every project, one full-width card each, in the order of projects.ts. Never a grid. */
-export function WorkSection() {
+export function ProjectsSection() {
   if (projects.length === 0) return null;
+  const featured = projects.find((p) => p.featured) ?? projects[0];
+  const rest = projects.filter((p) => p !== featured);
+  const shown = rest.slice(0, HOME_GRID);
   return (
     <Container>
-      <Section id="work" heading="Work">
-        <ul className="space-y-6">
-          {projects.map((project) => (
-            <li key={project.slug}>
-              <ProjectCard project={project} />
-            </li>
-          ))}
-        </ul>
+      <Section id="projects" heading="Projects">
+        <div className="space-y-6">
+          <ProjectCard project={featured} variant="featured" />
+          {shown.length ? (
+            <ul className="grid gap-6 sm:grid-cols-2">
+              {shown.map((project) => (
+                <li key={project.slug}>
+                  <ProjectCard project={project} variant="grid" />
+                </li>
+              ))}
+            </ul>
+          ) : null}
+          {rest.length > shown.length ? (
+            <div className="flex justify-center pt-4">
+              <Button href="/projects">View all projects</Button>
+            </div>
+          ) : null}
+        </div>
       </Section>
     </Container>
   );
 }
 
-/** The skills, group name on the left, chips on the right. Empty groups are left out. */
 export function SkillsSection() {
   const groups = skillGroups.filter((group) => group.skills.length > 0);
   if (groups.length === 0) return null;
@@ -91,7 +101,6 @@ export function SkillsSection() {
   );
 }
 
-/** The degree, with the GPA on its own line and the coursework as small chips. */
 export function EducationSection() {
   if (education.length === 0) return null;
   return (
@@ -106,7 +115,7 @@ export function EducationSection() {
               <p className="mt-4 text-lg font-semibold tracking-tight text-fg">
                 GPA {site.gpa.value} / {site.gpa.scale}
               </p>
-              {entry.coursework.length ? (
+              {site.flags.showCoursework && entry.coursework.length ? (
                 <div className="mt-6">
                   <MicroLabel>Relevant coursework</MicroLabel>
                   <ul className="mt-3 flex flex-wrap gap-2">
@@ -126,7 +135,6 @@ export function EducationSection() {
   );
 }
 
-/** Work history, as a typographic timeline. Off at launch. */
 export function ExperienceSection() {
   if (!site.flags.showExperience || experience.length === 0) return null;
   return (

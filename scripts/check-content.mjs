@@ -1,11 +1,3 @@
-// Checks everything in src/content/ before the site is built.
-//
-//   npm run check:content      (also runs first in `npm run build`)
-//
-// Fails on: placeholder words (TODO, lorem, placeholder…), an empty string, an image whose file
-// is missing from public/, a badly formed or repeated project slug, more than one featured
-// project. Fields that simply haven't been written yet are listed but don't fail — the site
-// shows nothing in their place.
 import { existsSync } from "node:fs";
 import path from "node:path";
 
@@ -19,7 +11,6 @@ import { currentlyBuilding } from "../src/content/currently-building.ts";
 
 const content = { site, projects, skillGroups, education, experience, posts, currentlyBuilding };
 
-// Fields that exist in the type but may not be written yet. Absent ones are listed, not failed.
 const OPTIONAL = {
   projects: ["hook", "summary", "role", "image", "caseStudy"],
   education: ["start"],
@@ -38,7 +29,6 @@ function walk(value, where) {
   } else if (Array.isArray(value)) {
     value.forEach((item, i) => walk(item, `${where}[${i}]`));
   } else if (value && typeof value === "object") {
-    // An image: its file must exist under public/.
     if (typeof value.src === "string" && "alt" in value) {
       const file = path.join("public", value.src);
       if (!existsSync(file)) errors.push(`${where}.src points at a missing file: ${file}`);

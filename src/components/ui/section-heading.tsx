@@ -4,13 +4,11 @@ import { cx } from "@/lib/cx";
 
 type SectionHeadingProps = {
   children: string;
-  /** Optional right-aligned link, e.g. { href: "/work", label: "View all" }. */
   link?: { href: string; label: string };
   className?: string;
   id?: string;
 };
 
-// 34px light heading with tight tracking; an optional small link sits on the same baseline.
 export function SectionHeading({ children, link, className, id }: SectionHeadingProps) {
   return (
     <div className={cx("flex items-baseline justify-between gap-6", className)}>

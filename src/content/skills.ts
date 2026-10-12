@@ -1,8 +1,5 @@
 import type { TechId } from "./tech";
 
-// The skills section, in four groups. A skill is listed only if the owner could talk about it
-// for two minutes in an interview.
-
 export type Skill = { name: string; tech?: TechId };
 
 export type SkillGroup = {

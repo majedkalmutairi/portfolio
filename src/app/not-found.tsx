@@ -8,9 +8,6 @@ export const metadata: Metadata = {
   title: `Page not found — ${site.shortName}`,
 };
 
-// Shown for any address that doesn't exist, in the owner's five-part layout: a large quiet "404",
-// the heading, his line, a clear way home, and two small links (a Resume link joins them once a
-// CV exists — site.flags.showResume).
 export default function NotFound() {
   const linkClass = "text-body text-fg-muted transition-colors duration-150 hover:text-fg";
 
@@ -30,8 +27,8 @@ export default function NotFound() {
         Back home
       </Button>
       <nav aria-label="Elsewhere" className="mt-14 flex items-center gap-5">
-        <Link href="/#about" className={linkClass}>
-          About
+        <Link href="/#projects" className={linkClass}>
+          Projects
         </Link>
         <a href={site.links.linkedin} target="_blank" rel="noopener noreferrer" className={linkClass}>
           LinkedIn ↗

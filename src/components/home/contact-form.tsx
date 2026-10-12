@@ -11,8 +11,6 @@ const field =
   "w-full rounded-md border border-line bg-transparent px-3 py-2.5 text-body text-fg " +
   "transition-colors duration-150 focus:border-fg-secondary";
 
-// The contact form. It runs in the visitor's browser: it collects the three fields, sends them to
-// /api/contact (our server function), and shows the result as a line of text under the button.
 export function ContactForm({ email }: { email: string }) {
   const [state, setState] = useState<State>({ kind: "idle" });
 
@@ -90,8 +88,6 @@ export function ContactForm({ email }: { email: string }) {
         />
       </div>
 
-      {/* The honeypot: hidden from people and screen readers, but bots fill in every field.
-          If it arrives with a value, the server drops the message without saying so. */}
       <div aria-hidden="true" className="absolute left-[-9999px] h-px w-px overflow-hidden">
         <label htmlFor="contact-company">Company</label>
         <input id="contact-company" name="company" tabIndex={-1} autoComplete="off" />

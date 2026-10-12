@@ -6,17 +6,9 @@ import { motion, useReducedMotion } from "motion/react";
 type RevealProps = {
   children: ReactNode;
   className?: string;
-  /** Seconds to wait before starting — use sparingly, for one thing after another. */
   delay?: number;
 };
 
-// The site's only entrance animation: fade in while rising 16px, ~450ms, ease-out, once.
-// Starts when the element is 10% into the viewport.
-//
-// Reduced motion is handled twice on purpose. The hook skips the animation; and a CSS rule in
-// globals.css (`[data-reveal]` under prefers-reduced-motion, and inside <noscript>) forces the
-// final state with !important, because the server always sends the hidden start state and a
-// browser with motion off — or with no JavaScript — must still show the content.
 export function Reveal({ children, className, delay = 0 }: RevealProps) {
   const reduce = useReducedMotion();
 

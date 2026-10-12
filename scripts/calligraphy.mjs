@@ -1,14 +1,3 @@
-// Generates the handwritten greeting in the About section.
-//
-//   npm run calligraphy            → every font in FONTS
-//   npm run calligraphy -- amiri   → one font
-//
-// For each font: shape "السلام عليكم" with fontkit (it joins Arabic letters correctly), turn every
-// glyph into a filled SVG path, then — in a headless browser — rasterise each glyph, thin it down to
-// its one-pixel-wide centre line (the route a pen would take), and turn that into stroke paths with
-// a pen width wide enough to cover the letter. The site hides the filled letter behind a stencil and
-// moves an invisible brush along the centre line, so the ink appears under the pen — nothing is
-// outlined first. Output: src/components/home/salam/<font>.ts. The fonts never ship.
 import { existsSync, mkdirSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import * as fontkit from "fontkit";
@@ -19,9 +8,7 @@ const CACHE = path.join("node_modules", ".cache", "calligraphy");
 const OUT_DIR = path.join("src", "components", "home", "salam-fonts");
 const RAW = "https://github.com/google/fonts/raw/main/ofl/";
 
-// Google Fonts, SIL Open Font License. Any `ofl/<family>/<File>.ttf` from github.com/google/fonts
-// can be added here to try another face; fontkit cannot read every font (Gulzar, for one).
-const FONTS = [{ id: "amiri", label: "Amiri", file: "amiri/Amiri-Regular.ttf" }]; // the owner's pick
+const FONTS = [{ id: "amiri", label: "Amiri", file: "amiri/Amiri-Regular.ttf" }];
 
 const only = process.argv.slice(2);
 const fonts = only.length ? FONTS.filter((f) => only.includes(f.id)) : FONTS;
@@ -38,8 +25,6 @@ async function fontFile(font) {
   return file;
 }
 
-// Shapes the phrase and returns one entry per drawable glyph: its filled path (font units, y
-// pointing down like SVG), its box, which word it belongs to, and whether it is a dot/mark.
 function shape(file) {
   const font = fontkit.openSync(file);
   const run = font.layout(TEXT);
@@ -61,7 +46,6 @@ function shape(file) {
     const b = outline.bbox;
     const width = b.maxX - b.minX;
     const height = b.maxY - b.minY;
-    // A mark with no letter of its own, or anything dot-sized, is drawn after its word's letters.
     const isMark =
       glyph.codePoints.length === 0 || (width < 0.26 * font.unitsPerEm && height < 0.26 * font.unitsPerEm);
     glyphs.push({
@@ -75,9 +59,6 @@ function shape(file) {
   return { glyphs, unitsPerEm: font.unitsPerEm };
 }
 
-// Runs inside the browser. Rasterises one glyph, thins it to its centre line, breaks that into
-// strokes between junctions, orders them the way a pen would move (right to left, details first),
-// and measures how wide the pen must be on each stroke to cover the letter.
 function skeletonizeInBrowser({ d, box, scale }) {
   const PAD = 6;
   const W = Math.ceil((box.maxX - box.minX) * scale) + PAD * 2;
@@ -94,7 +75,6 @@ function skeletonizeInBrowser({ d, box, scale }) {
   const ink = new Uint8Array(W * H);
   for (let i = 0; i < W * H; i++) ink[i] = rgba[i * 4 + 3] > 127 ? 1 : 0;
 
-  // Distance to the nearest background pixel (chamfer 3-4, two passes), in pixels.
   const INF = 1e9;
   const dist = new Float32Array(W * H);
   for (let i = 0; i < W * H; i++) dist[i] = ink[i] ? INF : 0;
@@ -120,9 +100,8 @@ function skeletonizeInBrowser({ d, box, scale }) {
       if (x > 0 && y < H - 1) m = Math.min(m, dist[i + W - 1] + 4);
       dist[i] = m;
     }
-  const thickness = (x, y) => dist[y * W + x] / 3; // half the stroke width at that pixel
+  const thickness = (x, y) => dist[y * W + x] / 3;
 
-  // Connected components of the ink (8-connected), so dots can be told from the letter body.
   const label = new Int32Array(W * H).fill(-1);
   const area = [];
   for (let s = 0; s < W * H; s++) {
@@ -150,7 +129,6 @@ function skeletonizeInBrowser({ d, box, scale }) {
     }
   }
 
-  // Zhang–Suen thinning: peel the shape from all sides until a one-pixel line is left.
   const sk = Uint8Array.from(ink);
   const P = (x, y) => (x < 0 || y < 0 || x >= W || y >= H ? 0 : sk[y * W + x]);
   let changed = true;
@@ -185,7 +163,6 @@ function skeletonizeInBrowser({ d, box, scale }) {
     }
   }
 
-  // The skeleton as a graph: nodes are end points and junctions, edges are the runs between them.
   const neighbours = (x, y) => {
     const out = [];
     for (let dy = -1; dy <= 1; dy++)
@@ -204,7 +181,6 @@ function skeletonizeInBrowser({ d, box, scale }) {
         skPixels.push([x, y]);
       }
   const isNode = (x, y) => P(x, y) && degree[y * W + x] !== 2;
-  // Node pixels that touch each other form one node.
   const nodeOf = new Int32Array(W * H).fill(-1);
   const nodes = [];
   for (const [x, y] of skPixels) {
@@ -227,7 +203,7 @@ function skeletonizeInBrowser({ d, box, scale }) {
     node.y = node.pixels.reduce((s, p) => s + p[1], 0) / node.pixels.length;
   }
   const edges = [];
-  const used = new Uint8Array(W * H); // degree-2 pixels already claimed by an edge
+  const used = new Uint8Array(W * H);
   const addEdge = (a, b, pts) => {
     const e = { a, b, pts };
     edges.push(e);
@@ -239,7 +215,6 @@ function skeletonizeInBrowser({ d, box, scale }) {
       for (const [qx, qy] of neighbours(px, py)) {
         const q = qy * W + qx;
         if (isNode(qx, qy)) {
-          // Two nodes touching directly: a tiny edge, recorded once.
           const other = nodeOf[q];
           if (other > node.id && !edges.some((e) => e.a === node.id && e.b === other && e.pts.length === 2))
             addEdge(node.id, other, [
@@ -281,19 +256,17 @@ function skeletonizeInBrowser({ d, box, scale }) {
           cx = free[0];
           cy = free[1];
         }
-        if (end === -1) end = node.id; // ran back into itself (a loop through this node)
+        if (end === -1) end = node.id;
         addEdge(node.id, end, pts);
       }
     }
   }
-  // A closed ring with no end points or junctions (an isolated loop) has no nodes yet.
   for (const [x, y] of skPixels) {
     const i = y * W + x;
     if (used[i] || isNode(x, y)) continue;
     const id = nodes.length;
     const node = { id, pixels: [[x, y]], x, y, edges: [], comp: label[i] };
     nodes.push(node);
-    // Start the ring at its rightmost pixel so the pen begins on the right.
     const pts = [[x, y]];
     used[i] = 1;
     let cx = x,
@@ -316,7 +289,6 @@ function skeletonizeInBrowser({ d, box, scale }) {
     addEdge(id, id, pts);
   }
 
-  // Prune hairs: a short edge ending in an end point, no longer than the stroke is thick there.
   const edgeLen = (e) => {
     let l = 0;
     for (let k = 1; k < e.pts.length; k++)
@@ -338,8 +310,6 @@ function skeletonizeInBrowser({ d, box, scale }) {
     }
   }
 
-  // Order the strokes like a pen: start at the rightmost end, and at every junction take the
-  // detour whose far end is furthest right first (finish the local detail), keep going left last.
   const visited = new Set();
   const ordered = [];
   function walk(nodeId) {
@@ -361,7 +331,7 @@ function skeletonizeInBrowser({ d, box, scale }) {
     if (!byComp.has(n.comp)) byComp.set(n.comp, []);
     byComp.get(n.comp).push(n);
   }
-  const comps = [...byComp.entries()].sort((a, b) => area[b[0]] - area[a[0]]); // body first, dots after
+  const comps = [...byComp.entries()].sort((a, b) => area[b[0]] - area[a[0]]);
   const strokesByComp = [];
   for (const [comp, members] of comps) {
     const ends = members.filter((n) => n.edges.length === 1);
@@ -374,7 +344,6 @@ function skeletonizeInBrowser({ d, box, scale }) {
     walk(start.id);
     for (const n of members) if (n.edges.some((e) => !visited.has(e))) walk(n.id);
     if (ordered.length === before) {
-      // A piece so small it thinned to a single point (a dot): one short dab across its middle.
       const r = Math.max(1, thickness(Math.round(start.x), Math.round(start.y)) / 2);
       ordered.push({
         pts: [
@@ -387,8 +356,6 @@ function skeletonizeInBrowser({ d, box, scale }) {
     strokesByComp.push({ area: area[comp], strokes: ordered.slice(before) });
   }
 
-  // Simplify each polyline (Ramer–Douglas–Peucker), measure the pen width it needs, convert back
-  // to font units.
   const simplify = (pts, eps) => {
     if (pts.length < 3) return pts;
     let maxD = 0,
@@ -417,7 +384,6 @@ function skeletonizeInBrowser({ d, box, scale }) {
       let len = 0;
       for (let k = 1; k < simple.length; k++)
         len += Math.hypot(simple[k][0] - simple[k - 1][0], simple[k][1] - simple[k - 1][1]);
-      // A fifth wider than the letter, so a round pen tip still covers square stroke ends.
       return { pts: simple, len, w: ((half * 1.2 + 2) * 2) / scale };
     }),
   }));
@@ -435,19 +401,17 @@ for (const font of fonts) {
   try {
     shaped = shape(file);
   } catch (error) {
-    // fontkit can't read every font. Say which, and carry on with the rest.
     console.error(`${font.label}: skipped — fontkit couldn't read it (${error.message})`);
     continue;
   }
   const { glyphs, unitsPerEm } = shaped;
-  const scale = 360 / unitsPerEm; // ~360 px per em is plenty for a clean centre line
+  const scale = 360 / unitsPerEm;
   const PAD = 0.04 * unitsPerEm;
   const minX = Math.min(...glyphs.map((g) => g.box.minX)) - PAD;
   const minY = Math.min(...glyphs.map((g) => g.box.minY)) - PAD;
   const maxX = Math.max(...glyphs.map((g) => g.box.maxX)) + PAD;
   const maxY = Math.max(...glyphs.map((g) => g.box.maxY)) + PAD;
 
-  // Writing order: first word (on the right) before the second; letters before marks; right to left.
   glyphs.sort((a, b) => a.word - b.word || Number(a.isMark) - Number(b.isMark) || b.cx - a.cx);
 
   const out = [];
@@ -455,8 +419,6 @@ for (const font of fonts) {
     const comps = await page.evaluate(skeletonizeInBrowser, { d: g.d, box: g.box, scale });
     const strokes = [];
     comps.forEach((c, ci) => {
-      // Join routes that continue where the last one ended (the pen never lifted), unless the pen
-      // would have to change width a lot — a wide pen on a thin stroke uncovers too much at once.
       const merged = [];
       for (const s of c.strokes) {
         const prev = merged[merged.length - 1];
@@ -477,7 +439,6 @@ for (const font of fonts) {
           d: "M" + s.pts.map(([x, y]) => `${r1(x)} ${r1(y)}`).join("L"),
           len: r1(s.len),
           w: r1(s.w),
-          // First stroke of a separate piece (a dot, say): the pen lifts before it.
           ...(ci > 0 && si === 0 ? { lift: true } : {}),
         });
       });
@@ -485,10 +446,7 @@ for (const font of fonts) {
     out.push({ fill: g.d.replace(/-?\d+\.\d+/g, (n) => String(r1(Number(n)))), word: g.word, strokes });
   }
   const totalLen = out.reduce((s, g) => s + g.strokes.reduce((t, k) => t + k.len, 0), 0);
-  const body = `// GENERATED by scripts/calligraphy.mjs — do not edit by hand; run \`npm run calligraphy -- ${font.id}\`.
-// "${TEXT}" in ${font.label} (SIL Open Font License). Each glyph: its filled shape, and the pen
-// strokes (centre lines) that reveal it, already in writing order.
-import type { SalamFont } from "./types";
+  const body = `import type { SalamFont } from "./types";
 
 export const ${font.id}: SalamFont = ${JSON.stringify(
     {

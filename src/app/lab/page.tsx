@@ -34,7 +34,6 @@ function Swatch({ name, className }: { name: string; className: string }) {
   );
 }
 
-// Every component, every variant. The theme toggle in the header shows the other half.
 export default function LabPage() {
   return (
     <div className="space-y-24">

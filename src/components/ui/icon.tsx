@@ -2,16 +2,11 @@ import type { SVGProps } from "react";
 import type { SimpleIcon } from "simple-icons";
 import { cx } from "@/lib/cx";
 
-// Interface glyphs come from lucide-react directly (e.g. `import { Sun } from "lucide-react"`).
-// Logos come through this file as inline SVG so nothing is fetched from a CDN.
-
 type BrandIconProps = SVGProps<SVGSVGElement> & {
-  /** A Simple Icons entry, e.g. `siArduino`. */
   icon: SimpleIcon;
   title?: string;
 };
 
-// Renders a Simple Icons logo. Colour follows `currentColor` unless overridden with a class.
 export function BrandIcon({ icon, title, className, ...rest }: BrandIconProps) {
   return (
     <svg
@@ -28,8 +23,6 @@ export function BrandIcon({ icon, title, className, ...rest }: BrandIconProps) {
   );
 }
 
-// LinkedIn is no longer distributed by Simple Icons (trademark request), so its mark is
-// drawn here by hand: a rounded square, the dot, the "i" stem and the "n".
 export function LinkedInIcon({ className, ...rest }: SVGProps<SVGSVGElement>) {
   return (
     <svg

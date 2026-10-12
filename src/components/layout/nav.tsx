@@ -3,11 +3,12 @@ import { ThemeToggle } from "@/components/theme/theme-toggle";
 import { Container } from "@/components/layout/container";
 import { navLinks, site } from "@/content/site";
 
-// The bar at the top of every page. It sticks while you scroll and blurs what passes under it.
-// Links point at "/#section", so they scroll on the homepage and lead back to it from elsewhere.
 export function Nav() {
   return (
-    <header className="sticky top-0 z-40 border-b border-line bg-paper/70 backdrop-blur-xl dark:bg-ink/80">
+    <header
+      data-nav=""
+      className="sticky top-0 z-40 border-b border-line bg-paper/70 backdrop-blur-xl dark:bg-ink/80"
+    >
       <Container className="flex h-16 items-center justify-between gap-4">
         <Link
           href="/"

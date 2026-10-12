@@ -1,9 +1,3 @@
-// Makes src/app/apple-icon.png (180px) from src/app/icon.svg, so the two never drift apart.
-//
-//   npm run icons
-//
-// Apple rounds the corners itself and dislikes transparency, so the square is drawn full-bleed.
-// Uses the Edge channel: the bundled Chromium is blocked on this machine.
 import { readFile } from "node:fs/promises";
 import { chromium } from "playwright-core";
 

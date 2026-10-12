@@ -1,10 +1,8 @@
 import type { ContributionDay } from "@/components/ui/contribution-graph";
 
-// SAMPLE DATA for /lab only — invented numbers so the graph's design can be judged.
-// Never passed to a real page. Deterministic (same picture every reload).
 export function sampleContributions(): ContributionDay[] {
   const days: ContributionDay[] = [];
-  const end = new Date(Date.UTC(2026, 8, 22)); // fixed so screenshots stay comparable
+  const end = new Date(Date.UTC(2026, 8, 22));
   let seed = 7;
   const rand = () => {
     seed = (seed * 1103515245 + 12345) % 2147483648;

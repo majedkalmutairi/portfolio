@@ -7,25 +7,13 @@ import { cx } from "@/lib/cx";
 
 type SalamProps = {
   font: SalamFont;
-  /** Unique on the page: the stencils are referenced by id. */
   id: string;
-  /** The pen's rhythm and ink behaviour. See salam-designs.ts. */
   design?: SalamDesign;
-  /** `inview` (default) plays once when the nearest <section> is 35% on screen; `now` plays at once. */
   play?: "inview" | "now";
   onDone?: () => void;
   className?: string;
 };
 
-// The handwritten greeting (owner's spec: docs/content/about-calligraphy-spec.md; technique changed
-// on his request 2026-10-05). It is drawn the way a hand writes: each letter's filled shape is used
-// as a stencil, and a wide invisible brush moves along the letter's centre line, so the ink appears
-// under the pen tip — no outline, no fill-in afterwards.
-//
-// The server sends the finished, inked phrase. With JavaScript and motion allowed, the ink is hidden
-// before the first paint and the brush strokes play in writing order; as the pen leaves each letter,
-// that letter's finished ink settles over the pen's work. Reduced motion, or no JavaScript: the
-// finished phrase simply stays. Only stroke-dashoffset, opacity and (for the nib) offset-distance change.
 export function Salam({
   font,
   id,
@@ -41,7 +29,6 @@ export function Salam({
     onDoneRef.current = onDone;
   });
 
-  // Hide the ink before the browser paints, but only when the animation is going to run.
   useLayoutEffect(() => {
     const svg = svgRef.current;
     if (!svg || !canAnimate()) return;
@@ -57,8 +44,6 @@ export function Salam({
     const { drawMs, liftMs, wordMs, dabMs, settleMs, easing, nib } = design;
     const showNib = nib && CSS.supports("offset-path", "path('M0 0L1 1')");
 
-    // One animation per stroke, each starting when the previous one ends — plus small pauses where
-    // a hand would lift the pen. Speed is constant: a stroke's time is its share of the total length.
     const strokes = Array.from(svg.querySelectorAll<SVGPathElement>("[data-stroke]"));
     const inks = Array.from(svg.querySelectorAll<SVGPathElement>("[data-ink]"));
     const nibs = Array.from(svg.querySelectorAll<SVGCircleElement>("[data-nib]"));
@@ -147,10 +132,7 @@ export function Salam({
       viewBox={font.viewBox}
       role="img"
       aria-label="السلام عليكم (as-salamu alaykum)"
-      className={cx(
-        "salam mx-auto block h-[clamp(3.5rem,9vw,8rem)] w-auto overflow-visible text-fg",
-        className,
-      )}
+      className={cx("salam block w-auto overflow-visible text-fg", className)}
     >
       <defs>
         {font.glyphs.map((g, i) => (
@@ -159,7 +141,6 @@ export function Salam({
           </mask>
         ))}
       </defs>
-      {/* The brush: wide strokes along each letter's centre line, visible only inside the stencil. */}
       <g
         fill="none"
         stroke="currentColor"
@@ -186,13 +167,11 @@ export function Salam({
           </g>
         ))}
       </g>
-      {/* The finished ink: what you see without JavaScript, with motion off, and once each letter is written. */}
       <g className="salam-ink" fill="currentColor">
         {font.glyphs.map((g, i) => (
           <path key={i} d={g.fill} data-ink="" />
         ))}
       </g>
-      {/* The pen tip, one per stroke, each riding along its stroke while that stroke is drawn. */}
       {design.nib ? (
         <g className="salam-nib" fill="currentColor">
           {font.glyphs.flatMap((g, i) =>

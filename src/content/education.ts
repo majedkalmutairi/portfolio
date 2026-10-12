@@ -1,21 +1,16 @@
-// The education section. The GPA lives in site.ts (it appears in more than one place).
-
 export type Education = {
   school: string;
   degree: string;
-  /** Where the school is. */
   location?: string;
-  /** Year the degree started, e.g. "2024". */
   start?: string;
   end: string;
-  /** Courses the owner could answer questions about. */
   coursework: string[];
 };
 
 export const education: Education[] = [
   {
     school: "American University of the Middle East (AUM)",
-    degree: "B.Sc. Computer Engineering",
+    degree: "Bachelor of Science in Computer Engineering",
     location: "Kuwait",
     start: "2024",
     end: "Expected 2028",

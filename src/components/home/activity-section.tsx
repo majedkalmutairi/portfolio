@@ -25,8 +25,6 @@ type CalendarResponse = {
   };
 };
 
-// Asks GitHub for the last year of contributions. Runs on the server with the read-only token in
-// GITHUB_TOKEN, and is fetched again at most once a day. Any failure → null, never an error page.
 async function fetchContributions(): Promise<ContributionDay[] | null> {
   const token = process.env.GITHUB_TOKEN;
   if (!token) return null;
@@ -49,7 +47,6 @@ async function fetchContributions(): Promise<ContributionDay[] | null> {
   }
 }
 
-/** The GitHub contribution graph. Off at launch (site.flags.showActivityGraph). */
 export async function ActivitySection() {
   if (!site.flags.showActivityGraph) return null;
   const days = await fetchContributions();

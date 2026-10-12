@@ -1,56 +1,66 @@
 import Image from "next/image";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { DashedCard } from "@/components/ui/dashed-card";
 import { MicroLabel } from "@/components/ui/micro-label";
-import { STATUS_LABEL } from "@/components/ui/status-pill";
-import { TechPill } from "@/components/ui/tech-pill";
+import { StatusPill } from "@/components/ui/status-pill";
+import { TechLogo, TechPill } from "@/components/ui/tech-pill";
 import type { Project } from "@/content/projects";
+import { tech } from "@/content/tech";
 import { cx } from "@/lib/cx";
 
-// One project on the homepage, built entirely from its entry in projects.ts.
-// The featured project puts its image full-width on top; the others put it on the left (~45%).
-// On phones every card is image-over-text. A project with no image yet is simply a text card.
-// "Read case study" appears once the case study is written; "Source" only where code is public.
-export function ProjectCard({ project }: { project: Project }) {
-  const { image, featured } = project;
-  const sideBySide = Boolean(image) && !featured;
+type Variant = "featured" | "grid";
 
+const highlight = (status: Project["status"]) => status === "active" || status === "in-progress";
+
+type CardProps = { project: Project; href?: string; className?: string };
+
+export function ProjectCard({
+  project,
+  variant,
+  className,
+}: {
+  project: Project;
+  variant: Variant;
+  className?: string;
+}) {
+  const href = project.caseStudy ? `/projects/${project.slug}` : undefined;
+  return variant === "featured" ? (
+    <Featured project={project} href={href} className={className} />
+  ) : (
+    <Grid project={project} href={href} className={className} />
+  );
+}
+
+function Featured({ project, href, className }: CardProps) {
+  const { image } = project;
   return (
-    <DashedCard className={cx("p-4 sm:p-5", sideBySide && "sm:grid sm:grid-cols-[45%_1fr] sm:gap-6")}>
+    <DashedCard
+      className={cx(
+        "overflow-hidden transition-colors duration-150 hover:bg-hover",
+        image && "sm:grid sm:grid-cols-[45%_1fr]",
+        className,
+      )}
+    >
       {image ? (
-        <div
-          className={cx(
-            "relative overflow-hidden rounded-md border border-line bg-surface",
-            featured ? "aspect-[16/9]" : "aspect-[4/3] sm:aspect-auto sm:min-h-full",
-          )}
-        >
+        <div className="relative aspect-4/3 border-b border-dashed border-line bg-surface sm:aspect-auto sm:min-h-75 sm:border-r sm:border-b-0">
           <Image
             src={image.src}
             alt={image.alt}
             fill
-            sizes={featured ? "(min-width: 768px) 728px, 100vw" : "(min-width: 768px) 330px, 100vw"}
+            sizes="(min-width: 768px) 330px, 100vw"
             className="object-cover"
           />
         </div>
       ) : null}
-
-      <div
-        className={cx(
-          "flex flex-col",
-          image && (sideBySide ? "mt-5 sm:mt-0 sm:py-1" : "mt-5"),
-          !image && "sm:p-1",
-        )}
-      >
-        <MicroLabel>{STATUS_LABEL[project.status]}</MicroLabel>
-        <h3 className="mt-2 text-title text-fg">{project.name}</h3>
+      <div className="flex flex-col p-6 sm:p-8">
+        <MicroLabel>Featured project</MicroLabel>
+        <h3 className="mt-3 flex flex-wrap items-center gap-2 text-title text-fg">
+          {project.name}
+          {highlight(project.status) ? <StatusPill status={project.status} /> : null}
+        </h3>
         {project.hook ? <p className="mt-2 text-body text-fg-secondary">{project.hook}</p> : null}
-        {project.summary ? <p className="mt-3 text-body text-fg-secondary">{project.summary}</p> : null}
-        {project.role ? (
-          <p className="mt-3 text-body text-fg-muted">
-            Role: <span className="text-fg-secondary">{project.role}</span>
-          </p>
-        ) : null}
-
+        {project.role ? <p className="mt-2 text-body text-fg-muted">{project.role}</p> : null}
         {project.tech.length ? (
           <ul className="mt-4 flex flex-wrap gap-2" aria-label="Built with">
             {project.tech.map((id) => (
@@ -60,23 +70,88 @@ export function ProjectCard({ project }: { project: Project }) {
             ))}
           </ul>
         ) : null}
-
-        {project.caseStudy || project.links.source ? (
-          <div className="mt-5 flex flex-wrap items-center gap-3">
-            {project.caseStudy ? <Button href={`/work/${project.slug}`}>Read case study</Button> : null}
-            {project.links.source ? (
-              <a
-                href={project.links.source}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="font-mono text-micro font-normal tracking-mono-label text-fg-secondary uppercase transition-colors duration-150 hover:text-fg"
-              >
-                Source ↗
-              </a>
-            ) : null}
+        {href || project.links.source ? (
+          <div className="mt-6 flex flex-wrap items-center gap-4">
+            {href ? <Button href={href}>Read case study</Button> : null}
+            {project.links.source ? <SourceLink href={project.links.source} /> : null}
           </div>
         ) : null}
       </div>
     </DashedCard>
+  );
+}
+
+function Grid({ project, href, className }: CardProps) {
+  const { image } = project;
+  const body = (
+    <DashedCard
+      className={cx(
+        "flex h-full flex-col p-4 transition-colors duration-150 group-focus-visible:bg-hover hover:bg-hover sm:p-5",
+        className,
+      )}
+    >
+      {image ? (
+        <div className="relative aspect-16/10 overflow-hidden rounded-md border border-line bg-surface">
+          <Image
+            src={image.src}
+            alt={image.alt}
+            fill
+            sizes="(min-width: 768px) 350px, 100vw"
+            className="object-cover"
+          />
+        </div>
+      ) : null}
+      <h3
+        className={cx(
+          "flex flex-wrap items-center gap-2 text-[17px] font-semibold tracking-tight text-fg",
+          image && "mt-5",
+        )}
+      >
+        {project.name}
+        {highlight(project.status) ? <StatusPill status={project.status} /> : null}
+      </h3>
+      {project.role ? <p className="mt-1 text-body font-medium text-fg-secondary">{project.role}</p> : null}
+      {project.hook ? <p className="mt-2 text-body font-light text-fg-secondary">{project.hook}</p> : null}
+      {project.tech.length ? (
+        <ul className="mt-4 flex items-center gap-3" aria-label="Built with">
+          {project.tech.map((id) => (
+            <li key={id} className="flex">
+              <TechLogo id={id} />
+              <span className="sr-only">{tech[id].name}</span>
+            </li>
+          ))}
+        </ul>
+      ) : null}
+      {href || project.links.source ? (
+        <div className="mt-5 flex items-center justify-end gap-5 border-t border-line pt-4">
+          {project.links.source ? <SourceLink href={project.links.source} /> : null}
+          {href ? (
+            <MicroLabel mono className="text-fg-secondary">
+              Read case study ↗
+            </MicroLabel>
+          ) : null}
+        </div>
+      ) : null}
+    </DashedCard>
+  );
+  return href ? (
+    <Link href={href} className="group block h-full rounded-lg">
+      {body}
+    </Link>
+  ) : (
+    body
+  );
+}
+
+function SourceLink({ href }: { href: string }) {
+  return (
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="font-mono text-micro font-normal tracking-mono-label text-fg-secondary uppercase transition-colors duration-150 hover:text-fg"
+    >
+      Source ↗
+    </a>
   );
 }

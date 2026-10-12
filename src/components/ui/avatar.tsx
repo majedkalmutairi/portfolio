@@ -2,18 +2,14 @@ import Image from "next/image";
 import { cx } from "@/lib/cx";
 
 type AvatarProps = {
-  /** Path under /public. Leave out until the photo exists — the monogram shows instead. */
   src?: string;
   alt: string;
-  /** Initials for the empty state. */
   monogram: string;
   className?: string;
 };
 
-// Circle photo beside the name: 200px on desktop, 130px on phones. Until a photo exists it
-// shows the monogram in a dashed circle — a deliberate empty state, not a placeholder image.
 export function Avatar({ src, alt, monogram, className }: AvatarProps) {
-  const size = "size-[130px] sm:size-[200px]";
+  const size = "size-[124px] sm:size-[156px]";
   if (src) {
     return (
       <Image
@@ -33,7 +29,7 @@ export function Avatar({ src, alt, monogram, className }: AvatarProps) {
       className={cx(
         size,
         "flex shrink-0 items-center justify-center rounded-full border border-dashed border-line-strong",
-        "text-[28px] font-light tracking-micro text-fg-secondary sm:text-[40px]",
+        "text-[26px] font-light tracking-micro text-fg-secondary sm:text-[32px]",
         className,
       )}
     >
