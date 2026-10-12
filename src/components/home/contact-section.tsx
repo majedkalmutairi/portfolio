@@ -11,7 +11,7 @@ export function ContactSection() {
   return (
     <Container>
       <Section id="contact" heading="Let's talk">
-        <div className="grid gap-8 sm:grid-cols-[1fr_1.15fr] sm:gap-10">
+        <div className="grid grid-cols-1 gap-8 sm:grid-cols-[1fr_1.15fr] sm:gap-10">
           {site.contactLine ? <p className="text-body-lg text-fg-secondary">{site.contactLine}</p> : <div />}
 
           <div className="space-y-8">
