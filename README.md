@@ -1,8 +1,6 @@
 # portfolio
 
-Source for my personal site.
+personal portfolio site
 
 ```
-npm install
-npm run dev
 ```
