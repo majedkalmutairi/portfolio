@@ -32,14 +32,7 @@ function switchTheme(theme: Theme) {
     applyTheme(theme);
     return;
   }
-  const transition = document.startViewTransition(() => applyTheme(theme));
-  transition.finished.then(() => {
-    const nav = document.querySelector<HTMLElement>("header[data-nav]");
-    if (!nav) return;
-    nav.style.display = "none";
-    void nav.offsetHeight;
-    nav.style.display = "";
-  });
+  document.startViewTransition(() => applyTheme(theme));
 }
 
 export function ThemeToggle({ className = "" }: { className?: string }) {

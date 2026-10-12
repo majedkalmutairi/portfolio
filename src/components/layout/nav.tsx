@@ -5,10 +5,7 @@ import { navLinks, site } from "@/content/site";
 
 export function Nav() {
   return (
-    <header
-      data-nav=""
-      className="sticky top-0 z-40 border-b border-line bg-paper/70 backdrop-blur-xl dark:bg-ink/80"
-    >
+    <header className="sticky top-0 z-40 border-b border-line bg-paper/95 backdrop-blur-xl dark:bg-ink/95">
       <Container className="flex h-16 items-center justify-between gap-4">
         <Link
           href="/"
