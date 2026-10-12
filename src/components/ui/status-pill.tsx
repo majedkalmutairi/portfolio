@@ -1,11 +1,14 @@
+import type { ProjectStatus } from "@/content/projects";
 import { cx } from "@/lib/cx";
 
-export type Status = "active" | "in-progress" | "shipped";
+export type Status = ProjectStatus;
 
-const LABEL: Record<Status, string> = {
+/** The word each status shows as. */
+export const STATUS_LABEL: Record<Status, string> = {
   active: "Active",
   "in-progress": "In progress",
   shipped: "Shipped",
+  built: "Built",
 };
 
 // Tiny uppercase status tag. Neutral colours only — status is a word, not a colour.
@@ -17,7 +20,7 @@ export function StatusPill({ status, className }: { status: Status; className?: 
         className,
       )}
     >
-      {LABEL[status]}
+      {STATUS_LABEL[status]}
     </span>
   );
 }

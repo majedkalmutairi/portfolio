@@ -11,10 +11,10 @@ export type SkillGroup = {
 };
 
 export const skillGroups: SkillGroup[] = [
-  { heading: "Languages", skills: [{ name: "C" }] },
+  { heading: "Languages", skills: [{ name: "C", tech: "c" }] },
   {
     heading: "Frameworks & platforms",
-    skills: [{ name: "iOS release pipeline (Expo, EAS Build, TestFlight)" }],
+    skills: [{ name: "iOS release pipeline (Expo, EAS Build, TestFlight)", tech: "expo" }],
   },
   {
     heading: "Hardware & embedded",
@@ -27,10 +27,10 @@ export const skillGroups: SkillGroup[] = [
   {
     heading: "Tools",
     skills: [
-      { name: "Git and GitHub" },
-      { name: "FreeCAD" },
-      { name: "Blender" },
-      { name: "3D printing (Bambu Lab P1S)" },
+      { name: "Git and GitHub", tech: "git" },
+      { name: "FreeCAD", tech: "freecad" },
+      { name: "Blender", tech: "blender" },
+      { name: "3D printing (Bambu Lab P1S)", tech: "bambulab" },
     ],
   },
 ];

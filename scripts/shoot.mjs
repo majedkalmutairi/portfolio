@@ -29,15 +29,17 @@ for (const theme of THEMES) {
       await page.goto(BASE + p, { waitUntil: "networkidle" });
       // Hide Next's dev-mode badge so it never lands in a screenshot.
       await page.addStyleTag({ content: "nextjs-portal { display: none !important; }" });
-      // Scroll through once so every Reveal has fired, then back to the top.
+      // Scroll through once so every Reveal has fired, then back to the top. "instant" because the
+      // site scrolls smoothly, and a smooth jump hasn't arrived before the next one starts.
       await page.evaluate(async () => {
-        for (let y = 0; y < document.body.scrollHeight; y += 600) {
-          window.scrollTo(0, y);
-          await new Promise((r) => setTimeout(r, 80));
+        for (let y = 0; y < document.body.scrollHeight; y += 400) {
+          window.scrollTo({ top: y, behavior: "instant" });
+          await new Promise((r) => setTimeout(r, 120));
         }
-        window.scrollTo(0, 0);
+        window.scrollTo({ top: 0, behavior: "instant" });
       });
-      await page.waitForTimeout(600);
+      // Long enough for the About greeting (~3.8 s) to finish drawing.
+      await page.waitForTimeout(4000);
       const slug = p === "/" ? "home" : p.replace(/^\//, "").replace(/\//g, "-");
       const file = path.join(OUT, `${slug}-${width}-${theme}.png`);
       await mkdir(path.dirname(file), { recursive: true });

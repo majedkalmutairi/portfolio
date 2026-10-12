@@ -23,7 +23,10 @@ export function SectionHeading({ children, link, className, id }: SectionHeading
           className="group inline-flex shrink-0 items-center gap-1 text-body text-fg-muted transition-colors duration-150 hover:text-fg"
         >
           {link.label}
-          <ChevronRight className="size-3.5 transition-transform duration-150 group-hover:translate-x-0.5" aria-hidden="true" />
+          <ChevronRight
+            className="size-3.5 transition-transform duration-150 group-hover:translate-x-0.5"
+            aria-hidden="true"
+          />
         </Link>
       ) : null}
     </div>

@@ -59,8 +59,8 @@ export default function LabPage() {
           </p>
           <p className="text-title">Project title — 24 / 32 · 300</p>
           <p className="text-body-lg text-fg-secondary">
-            Body large — 18 / 32 · 300. The hero paragraph. Airy line-height is doing most of the
-            work here; the weight does the rest.
+            Body large — 18 / 32 · 300. The hero paragraph. Airy line-height is doing most of the work here;
+            the weight does the rest.
           </p>
           <p className="text-body text-fg-secondary">Body — 14 / 22 · 400. Descriptions, dates, nav links.</p>
           <p>
@@ -98,8 +98,9 @@ export default function LabPage() {
       <Spec title="Pill">
         <div className="space-y-4">
           <p className="text-body-lg text-fg-secondary">
-            Dashed pills flow inside a sentence, like <Pill variant="dashed" label="C" icon={<BrandIcon icon={siC} />} />{" "}
-            and <Pill variant="dashed" label="Arduino" icon={<BrandIcon icon={siArduino} />} /> here.
+            Dashed pills flow inside a sentence, like{" "}
+            <Pill variant="dashed" label="C" icon={<BrandIcon icon={siC} />} /> and{" "}
+            <Pill variant="dashed" label="Arduino" icon={<BrandIcon icon={siArduino} />} /> here.
           </p>
           <div className="flex flex-wrap gap-2">
             <Pill label="Solid" />
@@ -146,8 +147,7 @@ export default function LabPage() {
         <div className="flex flex-wrap items-center gap-8">
           <Avatar alt="Majed Khaled Almutairi" monogram="MKA" />
           <p className="max-w-xs text-body text-fg-muted">
-            Monogram until the photo exists. 200px on desktop, 130px on phones, always beside the
-            name.
+            Monogram until the photo exists. 200px on desktop, 130px on phones, always beside the name.
           </p>
         </div>
       </Spec>
@@ -168,8 +168,8 @@ export default function LabPage() {
         <Reveal>
           <DashedCard className="p-8">
             <p className="text-body-lg text-fg-secondary">
-              This card faded in and rose 16px as it entered the viewport. Once. With reduce
-              motion on, it was simply here.
+              This card faded in and rose 16px as it entered the viewport. Once. With reduce motion on, it was
+              simply here.
             </p>
           </DashedCard>
         </Reveal>

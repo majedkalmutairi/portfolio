@@ -9,7 +9,10 @@ export function Nav() {
   return (
     <header className="sticky top-0 z-40 border-b border-line bg-paper/70 backdrop-blur-xl dark:bg-ink/80">
       <Container className="flex h-16 items-center justify-between gap-4">
-        <Link href="/" className="text-sm font-bold text-fg transition-colors duration-150 hover:text-fg-secondary">
+        <Link
+          href="/"
+          className="text-sm font-bold text-fg transition-colors duration-150 hover:text-fg-secondary"
+        >
           {site.mark}
         </Link>
         <nav aria-label="Main" className="flex items-center gap-3 sm:gap-5">

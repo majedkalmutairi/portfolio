@@ -11,9 +11,7 @@ const svg = (await readFile("src/app/icon.svg", "utf8")).replace(/ rx="[^"]*"/, 
 
 const browser = await chromium.launch({ channel: "msedge", headless: true });
 const page = await browser.newPage({ viewport: { width: 180, height: 180 } });
-await page.setContent(
-  `<style>html,body{margin:0}svg{display:block;width:180px;height:180px}</style>${svg}`,
-);
+await page.setContent(`<style>html,body{margin:0}svg{display:block;width:180px;height:180px}</style>${svg}`);
 await page.screenshot({ path: "src/app/apple-icon.png" });
 await browser.close();
 console.log("wrote src/app/apple-icon.png");

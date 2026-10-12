@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { Container } from "@/components/layout/container";
 import { Button } from "@/components/ui/button";
 import { site } from "@/content/site";
@@ -7,16 +8,40 @@ export const metadata: Metadata = {
   title: `Page not found — ${site.shortName}`,
 };
 
-// Shown for any address that doesn't exist. The owner's one line sits under the heading once
-// he has written it (site.notFoundLine); until then the page is just the heading and the way home.
+// Shown for any address that doesn't exist, in the owner's five-part layout: a large quiet "404",
+// the heading, his line, a clear way home, and two small links (a Resume link joins them once a
+// CV exists — site.flags.showResume).
 export default function NotFound() {
+  const linkClass = "text-body text-fg-muted transition-colors duration-150 hover:text-fg";
+
   return (
-    <Container className="flex flex-col items-start gap-8 pt-24 pb-32 sm:pt-32">
-      <div className="space-y-3">
-        <h1 className="text-section text-fg">Page not found</h1>
-        {site.notFoundLine ? <p className="text-body-lg text-fg-secondary">{site.notFoundLine}</p> : null}
-      </div>
-      <Button href="/">Back home</Button>
+    <Container className="flex flex-col items-start pt-20 pb-28 sm:pt-28">
+      <p
+        aria-hidden="true"
+        className="text-[6rem] leading-none font-extralight tracking-tighter text-fg-muted sm:text-[8rem]"
+      >
+        404
+      </p>
+      <h1 className="mt-6 text-section text-fg">Page not found</h1>
+      {site.notFoundLine ? (
+        <p className="mt-3 max-w-xl text-body-lg text-fg-secondary">{site.notFoundLine}</p>
+      ) : null}
+      <Button href="/" className="mt-10">
+        Back home
+      </Button>
+      <nav aria-label="Elsewhere" className="mt-14 flex items-center gap-5">
+        <Link href="/#about" className={linkClass}>
+          About
+        </Link>
+        <a href={site.links.linkedin} target="_blank" rel="noopener noreferrer" className={linkClass}>
+          LinkedIn ↗
+        </a>
+        {site.flags.showResume && site.resume ? (
+          <a href={site.resume} className={linkClass}>
+            Resume
+          </a>
+        ) : null}
+      </nav>
     </Container>
   );
 }

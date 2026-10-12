@@ -58,7 +58,8 @@ for (const [list, keys] of Object.entries(OPTIONAL)) {
 
 const slugs = projects.map((p) => p.slug);
 for (const slug of slugs) {
-  if (!/^[a-z0-9]+(-[a-z0-9]+)*$/.test(slug)) errors.push(`project slug "${slug}" must be lowercase words joined by hyphens`);
+  if (!/^[a-z0-9]+(-[a-z0-9]+)*$/.test(slug))
+    errors.push(`project slug "${slug}" must be lowercase words joined by hyphens`);
   if (slugs.indexOf(slug) !== slugs.lastIndexOf(slug)) errors.push(`project slug "${slug}" is used twice`);
 }
 if (projects.filter((p) => p.featured).length > 1) errors.push("more than one project has featured: true");

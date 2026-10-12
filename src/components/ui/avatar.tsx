@@ -21,7 +21,7 @@ export function Avatar({ src, alt, monogram, className }: AvatarProps) {
         alt={alt}
         width={200}
         height={200}
-        priority
+        preload
         className={cx(size, "shrink-0 rounded-full object-cover ring-1 ring-line", className)}
       />
     );
@@ -33,7 +33,7 @@ export function Avatar({ src, alt, monogram, className }: AvatarProps) {
       className={cx(
         size,
         "flex shrink-0 items-center justify-center rounded-full border border-dashed border-line-strong",
-        "text-[28px] font-light tracking-[0.2em] text-fg-secondary sm:text-[40px]",
+        "text-[28px] font-light tracking-micro text-fg-secondary sm:text-[40px]",
         className,
       )}
     >

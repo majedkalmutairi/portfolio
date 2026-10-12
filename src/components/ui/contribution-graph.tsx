@@ -58,7 +58,11 @@ export function ContributionGraph({ days, className }: ContributionGraphProps) {
     <DashedCard className={cx("p-6 sm:p-8", className)}>
       <div className="overflow-x-auto">
         <div className="min-w-[640px]">
-          <div className="grid gap-x-[3px] text-body text-fg-muted" style={{ gridTemplateColumns: `repeat(${weeks.length}, minmax(0, 1fr))` }} aria-hidden="true">
+          <div
+            className="grid gap-x-[3px] text-body text-fg-muted"
+            style={{ gridTemplateColumns: `repeat(${weeks.length}, minmax(0, 1fr))` }}
+            aria-hidden="true"
+          >
             {monthLabels.map(({ label, week }) => (
               <span key={label + week} className="whitespace-nowrap" style={{ gridColumnStart: week + 1 }}>
                 {label}
@@ -69,7 +73,10 @@ export function ContributionGraph({ days, className }: ContributionGraphProps) {
             role="img"
             aria-label={`${total.toLocaleString("en")} contributions in the last year`}
             className="mt-2 grid grid-flow-col gap-[3px]"
-            style={{ gridTemplateRows: "repeat(7, minmax(0, 1fr))", gridTemplateColumns: `repeat(${weeks.length}, minmax(0, 1fr))` }}
+            style={{
+              gridTemplateRows: "repeat(7, minmax(0, 1fr))",
+              gridTemplateColumns: `repeat(${weeks.length}, minmax(0, 1fr))`,
+            }}
           >
             {weeks.flatMap((week, w) =>
               Array.from({ length: 7 }, (_, d) => {
@@ -81,7 +88,9 @@ export function ContributionGraph({ days, className }: ContributionGraphProps) {
                     className={cx("aspect-square w-full rounded-full", day ? "bg-line" : "invisible")}
                     style={
                       level
-                        ? ({ backgroundColor: `light-dark(${LEVEL_LIGHT[level]}, ${LEVEL_DARK[level]})` } as React.CSSProperties)
+                        ? ({
+                            backgroundColor: `light-dark(${LEVEL_LIGHT[level]}, ${LEVEL_DARK[level]})`,
+                          } as React.CSSProperties)
                         : undefined
                     }
                   />

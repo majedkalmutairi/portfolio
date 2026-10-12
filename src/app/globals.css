@@ -21,8 +21,8 @@
   /* Typeface: Inter (owner's pick, 2026-09-22), self-hosted by next/font which defines
      --font-inter on <html>. The system stack is only the fallback while it loads. */
   --font-sans:
-    var(--font-inter), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-    "Helvetica Neue", Arial, sans-serif;
+    var(--font-inter), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial,
+    sans-serif;
   --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 
   /* Type scale — role-named. Size / line-height / tracking / weight travel together. */
@@ -165,6 +165,13 @@
   }
   ::view-transition-new(root) {
     animation: theme-wipe 800ms var(--ease-in-out-strong);
+  }
+
+  /* The handwritten greeting (components/home/salam.tsx): while the pen is drawing, the finished
+     ink is hidden and only the brush strokes show; when it is done (or if it never runs) the ink
+     is what you see. */
+  .salam[data-pen="ready"] .salam-ink path {
+    opacity: 0;
   }
 
   /* Reduced motion: everything renders in its final state. */

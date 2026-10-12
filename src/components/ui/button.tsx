@@ -23,7 +23,10 @@ export function Button({ children, href, arrow = "chevron", className, ...rest }
     <>
       {children}
       {arrow === "chevron" ? (
-        <ChevronRight className="size-4 transition-transform duration-150 group-hover:translate-x-0.5" aria-hidden="true" />
+        <ChevronRight
+          className="size-4 transition-transform duration-150 group-hover:translate-x-0.5"
+          aria-hidden="true"
+        />
       ) : null}
       {arrow === "external" ? (
         <ArrowUpRight

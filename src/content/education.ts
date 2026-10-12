@@ -3,6 +3,8 @@
 export type Education = {
   school: string;
   degree: string;
+  /** Where the school is. */
+  location?: string;
   /** Year the degree started, e.g. "2024". */
   start?: string;
   end: string;
@@ -14,6 +16,7 @@ export const education: Education[] = [
   {
     school: "American University of the Middle East (AUM)",
     degree: "B.Sc. Computer Engineering",
+    location: "Kuwait",
     start: "2024",
     end: "Expected 2028",
     coursework: [
