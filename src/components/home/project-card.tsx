@@ -82,7 +82,8 @@ function Featured({ project, href, className }: CardProps) {
 }
 
 function Grid({ project, href, className }: CardProps) {
-  const { image } = project;
+  const { image, screens } = project;
+  const pictured = Boolean(image || screens?.length);
   const body = (
     <DashedCard
       className={cx(
@@ -100,11 +101,28 @@ function Grid({ project, href, className }: CardProps) {
             className="object-cover"
           />
         </div>
+      ) : screens?.length ? (
+        <div className="flex aspect-16/10 items-center justify-center gap-3 overflow-hidden rounded-md border border-line bg-surface">
+          {screens.map((screen) => (
+            <div
+              key={screen.src}
+              className="relative aspect-1290/2547 h-5/6 overflow-hidden rounded-sm border border-line"
+            >
+              <Image
+                src={screen.src}
+                alt={screen.alt}
+                fill
+                sizes="120px"
+                className="object-cover object-top"
+              />
+            </div>
+          ))}
+        </div>
       ) : null}
       <h3
         className={cx(
           "flex flex-wrap items-center gap-2 text-[17px] font-semibold tracking-tight text-fg",
-          image && "mt-5",
+          pictured && "mt-5",
         )}
       >
         {project.name}

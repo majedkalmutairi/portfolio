@@ -11,6 +11,7 @@ export type Project = {
   role?: string;
   tech: TechId[];
   image?: { src: string; alt: string };
+  screens?: { src: string; alt: string }[];
   links: { source?: string; live?: string };
   featured: boolean;
   caseStudy?: { heading: string; body: string[] }[];
@@ -44,6 +45,20 @@ export const projects: Project[] = [
     status: "active",
     role: "Product design, decisions and testing",
     tech: ["ios", "expo", "testflight"],
+    screens: [
+      {
+        src: "/projects/dosey/today-morning.webp",
+        alt: "Dosey's Today screen: one of three doses taken, two marked missed.",
+      },
+      {
+        src: "/projects/dosey/add-amount.webp",
+        alt: "Adding Vitamin C in Dosey: the amount and unit are typed in by hand.",
+      },
+      {
+        src: "/projects/dosey/history.webp",
+        alt: "Dosey's History screen: 81% of doses taken over seven days, missed doses marked on each day.",
+      },
+    ],
     links: {},
     featured: false,
   },
