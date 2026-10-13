@@ -12,6 +12,7 @@ export type Project = {
   tech: TechId[];
   image?: { src: string; alt: string };
   screens?: { src: string; alt: string }[];
+  video?: { src: string; poster: string; alt: string };
   links: { source?: string; live?: string };
   featured: boolean;
   caseStudy?: { heading: string; body: string[] }[];
@@ -35,6 +36,11 @@ export const projects: Project[] = [
     status: "built",
     role: "Design, 3D printing, electronics and code",
     tech: ["arduino", "cpp"],
+    video: {
+      src: "/projects/motorized-chainsaw-prop/card-loop.mp4",
+      poster: "/projects/motorized-chainsaw-prop/card-poster.webp",
+      alt: "The Motorized Chainsaw Prop on a desk, its belt of teeth running around the bar.",
+    },
     links: {},
     featured: false,
   },

@@ -33,6 +33,10 @@ function walk(value, where) {
       const file = path.join("public", value.src);
       if (!existsSync(file)) errors.push(`${where}.src points at a missing file: ${file}`);
     }
+    if (typeof value.poster === "string") {
+      const file = path.join("public", value.poster);
+      if (!existsSync(file)) errors.push(`${where}.poster points at a missing file: ${file}`);
+    }
     for (const [key, child] of Object.entries(value)) walk(child, `${where}.${key}`);
   }
 }

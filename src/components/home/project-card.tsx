@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { DashedCard } from "@/components/ui/dashed-card";
+import { LoopVideo } from "@/components/ui/loop-video";
 import { MicroLabel } from "@/components/ui/micro-label";
 import { StatusPill } from "@/components/ui/status-pill";
 import { TechLogo, TechPill } from "@/components/ui/tech-pill";
@@ -82,8 +83,8 @@ function Featured({ project, href, className }: CardProps) {
 }
 
 function Grid({ project, href, className }: CardProps) {
-  const { image, screens } = project;
-  const pictured = Boolean(image || screens?.length);
+  const { image, screens, video } = project;
+  const pictured = Boolean(video || image || screens?.length);
   const body = (
     <DashedCard
       className={cx(
@@ -91,7 +92,11 @@ function Grid({ project, href, className }: CardProps) {
         className,
       )}
     >
-      {image ? (
+      {video ? (
+        <div className="relative aspect-16/10 overflow-hidden rounded-md border border-line bg-surface">
+          <LoopVideo src={video.src} poster={video.poster} label={video.alt} />
+        </div>
+      ) : image ? (
         <div className="relative aspect-16/10 overflow-hidden rounded-md border border-line bg-surface">
           <Image
             src={image.src}
