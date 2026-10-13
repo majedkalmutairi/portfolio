@@ -31,11 +31,11 @@ export function Hero() {
             </div>
           </div>
 
-          <p className="mt-4 text-[1.7rem]/[2.125rem] font-light tracking-tight sm:text-headline">
+          <p className="mt-4 text-[1.7rem]/[2.125rem] font-light tracking-tight sm:text-headline md:text-[1.75rem]/[2.25rem]">
             <span className="text-fg">{site.headline.primary}</span>
             <span className="text-fg-secondary">
-              <span className="hidden sm:inline"> — </span>
-              <span className="block sm:inline">{site.headline.secondary}</span>
+              <span className="hidden md:inline"> — </span>
+              <span className="block md:inline">{site.headline.secondary}</span>
             </span>
           </p>
 
