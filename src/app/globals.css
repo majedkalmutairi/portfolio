@@ -54,6 +54,7 @@
   --radius-xl: 16px;
 
   --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+  --ease-out-cubic: cubic-bezier(0.33, 1, 0.68, 1);
   --ease-in-out-strong: cubic-bezier(0.77, 0, 0.175, 1);
 }
 
@@ -107,10 +108,99 @@
   }
 }
 
+@keyframes intro-curtain {
+  to {
+    transform: translateY(-100%);
+  }
+}
+
+@keyframes intro-rise {
+  from {
+    transform: translateY(24px);
+  }
+  to {
+    transform: none;
+  }
+}
+
+@keyframes intro-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes intro-rise-late {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes intro-safety {
+  to {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+#intro {
+  display: none;
+}
+
+html[data-intro] #intro {
+  display: grid;
+  place-items: center;
+  padding: 0 1.5rem;
+  border-bottom: 1px solid var(--line);
+}
+
+html[data-intro="play"] #intro {
+  animation: intro-safety 300ms var(--ease-out-quart) 6s both;
+}
+
+html[data-intro="reveal"] #intro {
+  animation: intro-curtain 800ms var(--ease-in-out-strong) both;
+  will-change: transform;
+}
+
+html[data-intro="play"] [data-intro-item],
+html[data-intro="play"] [data-intro-fade] {
+  animation: intro-rise-late 600ms var(--ease-out-quart) calc(6.3s + var(--i, 0) * 80ms) both;
+}
+
+html[data-intro="reveal"] [data-intro-item] {
+  animation:
+    intro-rise 800ms var(--ease-out-quart) calc(250ms + var(--i, 0) * 80ms) both,
+    intro-fade 1000ms var(--ease-out-cubic) calc(250ms + var(--i, 0) * 80ms) both;
+}
+
+html[data-intro="reveal"] [data-intro-fade] {
+  animation: intro-fade 1000ms var(--ease-out-cubic) 250ms both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html[data-intro] #intro {
+    display: none;
+  }
+
+  html[data-intro] [data-intro-item],
+  html[data-intro] [data-intro-fade] {
+    animation: none;
+  }
+}
+
 @layer base {
   html {
     scroll-behavior: smooth;
     scroll-padding-top: 5rem;
+    scrollbar-gutter: stable;
     background-color: var(--bg);
     color: var(--fg);
     font-family: var(--font-sans);

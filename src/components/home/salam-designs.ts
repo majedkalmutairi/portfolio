@@ -19,3 +19,12 @@ export const salamDefaultDesign: SalamDesign = {
   wet: 1,
   nib: true,
 };
+
+export const salamIntroDesign: SalamDesign = {
+  ...salamDefaultDesign,
+  drawMs: 1500,
+  liftMs: 60,
+  wordMs: 160,
+  dabMs: 45,
+  settleMs: 100,
+};
