@@ -85,15 +85,15 @@ function Featured({ project, href, className }: CardProps) {
 function Grid({ project, href, className }: CardProps) {
   const { image, screens, video } = project;
   const pictured = Boolean(video || image || screens?.length);
-  const body = (
+  return (
     <DashedCard
       className={cx(
-        "flex h-full flex-col p-4 transition-colors duration-150 group-focus-visible:bg-hover hover:bg-hover sm:p-5",
+        "relative flex h-full flex-col p-4 transition-colors duration-150 has-[a:focus-visible]:bg-hover hover:bg-hover sm:p-5",
         className,
       )}
     >
       {video ? (
-        <div className="relative aspect-16/10 overflow-hidden rounded-md border border-line bg-surface">
+        <div className="relative z-10 aspect-16/10 overflow-hidden rounded-md border border-line bg-surface">
           <LoopVideo src={video.src} poster={video.poster} label={video.alt} />
         </div>
       ) : image ? (
@@ -130,7 +130,13 @@ function Grid({ project, href, className }: CardProps) {
           pictured && "mt-5",
         )}
       >
-        {project.name}
+        {href ? (
+          <Link href={href} className="rounded-sm outline-none after:absolute after:inset-0 after:rounded-lg">
+            {project.name}
+          </Link>
+        ) : (
+          project.name
+        )}
         {highlight(project.status) ? <StatusPill status={project.status} /> : null}
       </h3>
       {project.role ? <p className="mt-1 text-body font-medium text-fg-secondary">{project.role}</p> : null}
@@ -156,13 +162,6 @@ function Grid({ project, href, className }: CardProps) {
         </div>
       ) : null}
     </DashedCard>
-  );
-  return href ? (
-    <Link href={href} className="group block h-full rounded-lg">
-      {body}
-    </Link>
-  ) : (
-    body
   );
 }
 

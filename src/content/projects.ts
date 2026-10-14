@@ -15,7 +15,7 @@ export type Project = {
   video?: { src: string; poster: string; alt: string };
   links: { source?: string; live?: string };
   featured: boolean;
-  caseStudy?: { heading: string; body: string[] }[];
+  caseStudy?: boolean;
 };
 
 export const projects: Project[] = [
@@ -28,6 +28,7 @@ export const projects: Project[] = [
     tech: ["arduino", "cpp"],
     links: {},
     featured: true,
+    caseStudy: true,
   },
   {
     slug: "motorized-chainsaw-prop",
@@ -43,6 +44,7 @@ export const projects: Project[] = [
     },
     links: {},
     featured: false,
+    caseStudy: true,
   },
   {
     slug: "dosey",
@@ -67,5 +69,6 @@ export const projects: Project[] = [
     ],
     links: {},
     featured: false,
+    caseStudy: true,
   },
 ];

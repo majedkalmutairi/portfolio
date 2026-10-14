@@ -48,7 +48,8 @@ function isExtreme(hex: string) {
 
 export function TechLogo({ id }: { id: TechId }) {
   if (tech[id].icon === "csharp") return <CsharpPlain size="0.875rem" color="currentColor" aria-hidden />;
-  if (tech[id].icon === "linux") return <Image src="/tech/linux.png" alt="" width={14} height={14} unoptimized />;
+  if (tech[id].icon === "linux")
+    return <Image src="/tech/linux.png" alt="" width={14} height={14} unoptimized />;
   const logo = LOGOS[tech[id].icon];
   if (!logo) return null;
   const style = isExtreme(logo.hex) ? undefined : ({ color: `#${logo.hex}` } as CSSProperties);

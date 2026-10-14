@@ -1,0 +1,15 @@
+## What it does
+
+The parking system tracks the number of available and unavailable parking spots in a parking lot, for cars to easily find the rows where there are empty spots available. There is a screen clearly showing the cars, before they enter the lot, whether or not there are any empty slots left in the parking lot. If there aren't, they don't enter, and avoid wasting their time looking for a spot that doesn't exist.
+
+## How it works
+
+Ultrasonic sensors, there were two of them for two parking spots. The result for each spot is two LEDs each, red for taken and green for free. A screen shows the total number of available spots, e.g. "1/2 slots available", and if they're all taken it shows "Parking lot full" and a buzzer sounds.
+
+## The hardest problem
+
+The hardest problem was getting the sensors calibrated properly for the different sizes of cars. Making the threshold too high meant slots would get put as unavailable even though they were empty, because the sensor was sensing the floor, and putting it too short would mean some smaller sedans or coupes would not get sensed.
+
+## My part
+
+The idea, the wiring, the code, the physical build and design, the model around the build, the presentation and report were all me.
