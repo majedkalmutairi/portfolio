@@ -13,8 +13,8 @@ export const site = {
   gpa: { value: "3.97", scale: "4.0" },
   photo: undefined as { src: string; alt: string } | undefined,
   resume: undefined as string | undefined,
-  about: "testtesttest" as string | undefined, //I'm Majed Almutairi. Software to me is the mind, and hardware is an extension of it. It's like giving software hands to work with, and watching it use them just as you wrote it to. What makes an excellent design is knowing when to change which aspect. I want to learn how to give cameras a mind. If I'm not spending my time coming up with new projects to steal my time, I'm in the gym. I love learning about the new science of min-maxing your time in the gym.
-  researchInterests: undefined as string | undefined, //I want to understand how a self-driving car tells a pedestrian from another car fast enough to label it as such in its systems.
+  about: "I'm a Computer Engineering student with a background in game creation using {unity} and {csharp} and a passion for embedded systems design and software development. I'm currently building an AutoRacer on Linux in {python} and {cplusplus}, starting with a custom 2D simulation system built with Pygame, then running the code on a real car using ROS 2 on an NVIDIA Jetson with a 2D lidar." as string | undefined,
+  researchInterests: undefined as string | undefined,
   status: "Computer Engineering" as string | undefined,
   location: "Kuwait",
   notFoundLine:
