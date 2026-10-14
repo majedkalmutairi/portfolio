@@ -34,7 +34,7 @@ export function ResumeButton({ className }: { className?: string }) {
           {site.resumeNote}
         </p>
         <div className="mt-5 flex justify-end">
-          <Button className="h-10 px-4 text-sm" arrow="none" onClick={() => dialog.current?.close()}>
+          <Button arrow="none" onClick={() => dialog.current?.close()}>
             Close
           </Button>
         </div>
