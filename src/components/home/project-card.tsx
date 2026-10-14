@@ -73,7 +73,7 @@ function Featured({ project, href, className }: CardProps) {
         ) : null}
         {href || project.links.source ? (
           <div className="mt-6 flex flex-wrap items-center gap-4">
-            {href ? <Button href={href}>Read case study</Button> : null}
+            {href ? <Button href={href}>View project</Button> : null}
             {project.links.source ? <SourceLink href={project.links.source} /> : null}
           </div>
         ) : null}
@@ -156,7 +156,7 @@ function Grid({ project, href, className }: CardProps) {
           {project.links.source ? <SourceLink href={project.links.source} /> : null}
           {href ? (
             <MicroLabel mono className="text-fg-secondary">
-              Read case study ↗
+              View project ›
             </MicroLabel>
           ) : null}
         </div>
