@@ -16,6 +16,11 @@ export const tech = {
   linux: { name: "Linux", icon: "linux" },
   pygame: { name: "Pygame", icon: "python" },
   ros2: { name: "ROS 2", icon: "ros" },
+  jetson: { name: "NVIDIA Jetson", icon: "nvidia" },
+  lidar: { name: "2D lidar", icon: "radar" },
+  sensors: { name: "Sensors", icon: "radio" },
+  breadboard: { name: "Breadboarding", icon: "circuit-board" },
+  soldering: { name: "Soldering", icon: "fire" },
 } as const satisfies Record<string, { name: string; icon: string }>;
 
 export type TechId = keyof typeof tech;

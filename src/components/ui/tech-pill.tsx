@@ -12,12 +12,15 @@ import {
   siGit,
   siIos,
   siLinux,
+  siNvidia,
   siPython,
   siRos,
   siUnity,
 } from "simple-icons";
 import Image from "next/image";
+import { CircuitBoard, Flame, Radar, Radio, type LucideIcon } from "lucide-react";
 import CsharpPlain from "devicons-react/icons/CsharpPlain";
+import { FireIcon } from "@/components/ui/fire-icon";
 import { BrandIcon } from "@/components/ui/icon";
 import { Pill } from "@/components/ui/pill";
 import { tech, type TechId } from "@/content/tech";
@@ -34,9 +37,17 @@ const LOGOS: Record<string, SimpleIcon> = {
   git: siGit,
   ios: siIos,
   linux: siLinux,
+  nvidia: siNvidia,
   python: siPython,
   ros: siRos,
   unity: siUnity,
+};
+
+const GLYPHS: Record<string, LucideIcon> = {
+  "circuit-board": CircuitBoard,
+  flame: Flame,
+  radar: Radar,
+  radio: Radio,
 };
 
 function isExtreme(hex: string) {
@@ -48,8 +59,11 @@ function isExtreme(hex: string) {
 
 export function TechLogo({ id }: { id: TechId }) {
   if (tech[id].icon === "csharp") return <CsharpPlain size="0.875rem" color="currentColor" aria-hidden />;
+  if (tech[id].icon === "fire") return <FireIcon />;
   if (tech[id].icon === "linux")
     return <Image src="/tech/linux.png" alt="" width={14} height={14} unoptimized />;
+  const Glyph = GLYPHS[tech[id].icon];
+  if (Glyph) return <Glyph strokeWidth={1.75} aria-hidden="true" />;
   const logo = LOGOS[tech[id].icon];
   if (!logo) return null;
   const style = isExtreme(logo.hex) ? undefined : ({ color: `#${logo.hex}` } as CSSProperties);

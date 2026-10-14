@@ -8,17 +8,32 @@ export type SkillGroup = {
 };
 
 export const skillGroups: SkillGroup[] = [
-  { heading: "Languages", skills: [{ name: "C", tech: "c" }] },
+  {
+    heading: "Languages",
+    skills: [
+      { name: "C", tech: "c" },
+      { name: "C++", tech: "cplusplus" },
+      { name: "C#", tech: "csharp" },
+      { name: "Python", tech: "python" },
+    ],
+  },
   {
     heading: "Frameworks & platforms",
-    skills: [{ name: "iOS release pipeline (Expo, EAS Build, TestFlight)", tech: "expo" }],
+    skills: [
+      { name: "Unity", tech: "unity" },
+      { name: "Pygame", tech: "pygame" },
+      { name: "ROS 2", tech: "ros2" },
+      { name: "Linux", tech: "linux" },
+      { name: "iOS release pipeline (Expo, EAS Build, TestFlight)", tech: "expo" },
+    ],
   },
   {
     heading: "Hardware & embedded",
     skills: [
       { name: "Arduino", tech: "arduino" },
-      { name: "Breadboarding and sensors" },
-      { name: "Soldering" },
+      { name: "Breadboarding", tech: "breadboard" },
+      { name: "Sensors", tech: "sensors" },
+      { name: "Soldering", tech: "soldering" },
     ],
   },
   {

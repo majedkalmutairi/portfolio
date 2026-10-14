@@ -75,7 +75,7 @@ export default function LabPage() {
         <div className="flex flex-wrap gap-4">
           <Button href="/lab">View Resume</Button>
           <Button href="https://github.com/majedkalmutairi" arrow="external">
-            Read case study
+            View project
           </Button>
           <Button arrow="none">Send</Button>
         </div>
