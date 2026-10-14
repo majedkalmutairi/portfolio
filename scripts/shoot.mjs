@@ -3,7 +3,7 @@ import path from "node:path";
 import { chromium } from "playwright-core";
 
 const BASE = process.env.BASE ?? "http://localhost:3000";
-const OUT = process.env.OUT ?? "assets/build";
+const OUT = process.env.OUT ?? "private/screenshots";
 const WIDTHS = [1440, 834, 390];
 const THEMES = ["dark", "light"];
 const paths = process.argv.slice(2).length ? process.argv.slice(2) : ["/lab"];

@@ -29,7 +29,6 @@ npm-debug.log*
 next-env.d.ts
 
 # local only
-/docs/
-/assets/
+/private/
 /.notes.git/
 /scripts/backup-notes.*
