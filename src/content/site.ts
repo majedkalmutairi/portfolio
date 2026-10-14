@@ -13,7 +13,8 @@ export const site = {
   gpa: { value: "3.97", scale: "4.0" },
   photo: undefined as { src: string; alt: string } | undefined,
   resume: undefined as string | undefined,
-  about: "I'm a Computer Engineering student with a background in game creation using {unity} and {csharp} and a passion for embedded systems design and software development. I'm currently building an AutoRacer on Linux in {python} and {cplusplus}, starting with a custom 2D simulation system built with Pygame, then running the code on a real car using ROS 2 on an NVIDIA Jetson with a 2D lidar." as string | undefined,
+  resumeNote: "Resume coming soon." as string | undefined,
+  about: "I'm a Computer Engineering student with a background in game creation using {unity} and {csharp} and a passion for embedded systems design and software development. I'm currently building an AutoRacer on {linux} in {python} and {cplusplus}, starting with a custom 2D simulation system built with {pygame}, then running the code on a real car using {ros2} on an NVIDIA Jetson with a 2D lidar." as string | undefined,
   researchInterests: undefined as string | undefined,
   status: "Computer Engineering" as string | undefined,
   location: "Kuwait",
@@ -31,7 +32,7 @@ export const site = {
   flags: {
     showExperience: false,
     showBlog: false,
-    showResume: false,
+    showResume: true,
     showCurrentlyBuilding: false,
     showActivityGraph: true,
     showCoursework: false,

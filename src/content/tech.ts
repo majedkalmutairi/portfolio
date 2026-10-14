@@ -13,6 +13,9 @@ export const tech = {
   csharp: { name: "C#", icon: "csharp" },
   python: { name: "Python", icon: "python" },
   cplusplus: { name: "C++", icon: "cplusplus" },
+  linux: { name: "Linux", icon: "linux" },
+  pygame: { name: "Pygame", icon: "python" },
+  ros2: { name: "ROS 2", icon: "ros" },
 } as const satisfies Record<string, { name: string; icon: string }>;
 
 export type TechId = keyof typeof tech;

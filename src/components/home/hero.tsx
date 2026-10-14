@@ -1,8 +1,8 @@
 import type { CSSProperties } from "react";
 import { Container } from "@/components/layout/container";
+import { ResumeButton } from "@/components/home/resume-button";
 import { RichText } from "@/components/home/rich-text";
 import { Avatar } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
 import { IconLink } from "@/components/ui/icon-link";
 import { MicroLabel } from "@/components/ui/micro-label";
 import { Reveal } from "@/components/ui/reveal";
@@ -56,10 +56,10 @@ export function Hero() {
             </div>
           ) : null}
 
-          {site.flags.showResume && site.resume ? (
-            <Button href={site.resume} className="mt-8">
-              View Resume
-            </Button>
+          {site.flags.showResume ? (
+            <div data-intro-item="" style={step(5)} className="mt-8">
+              <ResumeButton />
+            </div>
           ) : null}
         </Reveal>
       </Container>

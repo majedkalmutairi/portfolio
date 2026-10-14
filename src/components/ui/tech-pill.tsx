@@ -11,9 +11,13 @@ import {
   siFreecad,
   siGit,
   siIos,
+  siLinux,
   siPython,
+  siRos,
   siUnity,
 } from "simple-icons";
+import Image from "next/image";
+import CsharpPlain from "devicons-react/icons/CsharpPlain";
 import { BrandIcon } from "@/components/ui/icon";
 import { Pill } from "@/components/ui/pill";
 import { tech, type TechId } from "@/content/tech";
@@ -29,7 +33,9 @@ const LOGOS: Record<string, SimpleIcon> = {
   freecad: siFreecad,
   git: siGit,
   ios: siIos,
+  linux: siLinux,
   python: siPython,
+  ros: siRos,
   unity: siUnity,
 };
 
@@ -41,6 +47,8 @@ function isExtreme(hex: string) {
 }
 
 export function TechLogo({ id }: { id: TechId }) {
+  if (tech[id].icon === "csharp") return <CsharpPlain size="0.875rem" color="currentColor" aria-hidden />;
+  if (tech[id].icon === "linux") return <Image src="/tech/linux.png" alt="" width={14} height={14} unoptimized />;
   const logo = LOGOS[tech[id].icon];
   if (!logo) return null;
   const style = isExtreme(logo.hex) ? undefined : ({ color: `#${logo.hex}` } as CSSProperties);
