@@ -25,7 +25,7 @@ export const projects: Project[] = [
     hook: "Tells drivers whether there's a free spot before they enter the lot.",
     status: "built",
     role: "Idea, wiring, code, build and presentation",
-    tech: ["arduino", "cpp"],
+    tech: ["arduino", "cpp", "breadboard", "sensors"],
     links: {},
     featured: true,
     caseStudy: true,
@@ -36,7 +36,7 @@ export const projects: Project[] = [
     hook: "A wearable chainsaw prop with a motor-driven belt of teeth that really runs.",
     status: "built",
     role: "Design, 3D printing, electronics and code",
-    tech: ["arduino", "cpp"],
+    tech: ["arduino", "cpp", "soldering"],
     video: {
       src: "/projects/motorized-chainsaw-prop/card-loop.mp4",
       poster: "/projects/motorized-chainsaw-prop/card-poster.webp",
