@@ -39,6 +39,7 @@ export const site = {
     showActivityGraph: true,
     showCoursework: false,
   },
+  counter: { seed: 22, showFrom: 10 },
 };
 
 export const navLinks = [

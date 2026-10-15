@@ -1,5 +1,6 @@
 import { Fragment } from "react";
 import { Container } from "@/components/layout/container";
+import { VisitorCount } from "@/components/layout/visitor-count";
 import { IconLink } from "@/components/ui/icon-link";
 import { site } from "@/content/site";
 
@@ -20,6 +21,7 @@ export function Footer() {
                 <span>{part}</span>
               </Fragment>
             ))}
+            <VisitorCount />
           </p>
           <div className="flex items-center gap-3">
             <IconLink kind="github" href={site.links.github} />

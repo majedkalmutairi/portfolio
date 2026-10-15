@@ -6,6 +6,7 @@ import { ThemeScript } from "@/components/theme/theme-script";
 import { BackToTop } from "@/components/layout/back-to-top";
 import { Footer } from "@/components/layout/footer";
 import { Nav } from "@/components/layout/nav";
+import { VisitBeacon } from "@/components/layout/visit-beacon";
 import "./globals.css";
 
 const inter = Inter({
@@ -45,6 +46,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         </main>
         <Footer />
         <BackToTop />
+        <VisitBeacon />
         <Analytics />
       </body>
     </html>
