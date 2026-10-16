@@ -28,3 +28,9 @@ export const salamIntroDesign: SalamDesign = {
   dabMs: 45,
   settleMs: 100,
 };
+
+export const salamNameDesign: SalamDesign = {
+  ...salamIntroDesign,
+  drawMs: 1000,
+  easing: "ease-out",
+};

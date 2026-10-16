@@ -3,12 +3,28 @@ import path from "node:path";
 import * as fontkit from "fontkit";
 import { chromium } from "playwright-core";
 
-const TEXT = "السلام عليكم";
 const CACHE = path.join("node_modules", ".cache", "calligraphy");
 const OUT_DIR = path.join("src", "components", "home", "salam-fonts");
 const RAW = "https://github.com/google/fonts/raw/main/ofl/";
 
-const FONTS = [{ id: "amiri", label: "Amiri", file: "amiri/Amiri-Regular.ttf" }];
+const FONTS = [
+  {
+    id: "amiri",
+    label: "Amiri",
+    file: "amiri/Amiri-Regular.ttf",
+    text: "السلام عليكم",
+    out: "amiri.ts",
+    name: "amiri",
+  },
+  {
+    id: "name-arefruqaa",
+    label: "Aref Ruqaa",
+    file: "arefruqaa/ArefRuqaa-Regular.ttf",
+    text: "ماجد المطيري",
+    out: "name.ts",
+    name: "nameArefRuqaa",
+  },
+];
 
 const only = process.argv.slice(2);
 const fonts = only.length ? FONTS.filter((f) => only.includes(f.id)) : FONTS;
@@ -25,9 +41,9 @@ async function fontFile(font) {
   return file;
 }
 
-function shape(file) {
+function shape(file, text) {
   const font = fontkit.openSync(file);
-  const run = font.layout(TEXT);
+  const run = font.layout(text);
   const glyphs = [];
   let penX = 0;
   let spaceX = null;
@@ -399,7 +415,7 @@ for (const font of fonts) {
   const file = await fontFile(font);
   let shaped;
   try {
-    shaped = shape(file);
+    shaped = shape(file, font.text);
   } catch (error) {
     console.error(`${font.label}: skipped — fontkit couldn't read it (${error.message})`);
     continue;
@@ -448,7 +464,7 @@ for (const font of fonts) {
   const totalLen = out.reduce((s, g) => s + g.strokes.reduce((t, k) => t + k.len, 0), 0);
   const body = `import type { SalamFont } from "./types";
 
-export const ${font.id}: SalamFont = ${JSON.stringify(
+export const ${font.name}: SalamFont = ${JSON.stringify(
     {
       id: font.id,
       label: font.label,
@@ -459,7 +475,7 @@ export const ${font.id}: SalamFont = ${JSON.stringify(
     1,
   )};
 `;
-  writeFileSync(path.join(OUT_DIR, `${font.id}.ts`), body);
+  writeFileSync(path.join(OUT_DIR, font.out), body);
   console.log(
     `${font.label}: ${out.length} glyphs, ${out.reduce((s, g) => s + g.strokes.length, 0)} strokes, pen path ${Math.round(totalLen)} units`,
   );
