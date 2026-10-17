@@ -7,6 +7,8 @@ import { BackToTop } from "@/components/layout/back-to-top";
 import { Footer } from "@/components/layout/footer";
 import { Nav } from "@/components/layout/nav";
 import { VisitBeacon } from "@/components/layout/visit-beacon";
+import { site } from "@/content/site";
+import { firstSentence } from "@/lib/plain-text";
 import "./globals.css";
 
 const inter = Inter({
@@ -17,6 +19,7 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: "Majed Almutairi — Computer Engineering Student",
+  description: site.about ? firstSentence(site.about) : undefined,
 };
 
 export const viewport: Viewport = {
