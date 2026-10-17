@@ -88,7 +88,7 @@ function Grid({ project, href, className }: CardProps) {
   return (
     <DashedCard
       className={cx(
-        "relative flex h-full flex-col p-4 transition-colors duration-150 has-[a:focus-visible]:bg-hover hover:bg-hover sm:p-5",
+        "relative flex h-full flex-col p-4 transition-colors duration-150 has-[a:focus-visible]:bg-hover has-[a:focus-visible]:outline-2 has-[a:focus-visible]:outline-offset-3 has-[a:focus-visible]:outline-fg hover:bg-hover sm:p-5",
         className,
       )}
     >

@@ -33,12 +33,22 @@ export function ContactSection() {
         ) : null}
 
         {formReady ? (
-          <div className="@container mt-10 rounded-lg border border-dashed border-line px-5 pb-5 sm:px-8 sm:pb-8">
-            <div className="w-fit max-w-full -translate-y-1/2 bg-bg px-2 sm:-ml-3 sm:px-3">
-              <EmailLink />
+          <>
+            <div
+              id="contact-frame"
+              className="@container mt-10 rounded-lg border border-dashed border-line px-5 pb-5 sm:px-8 sm:pb-8"
+            >
+              <div className="w-fit max-w-full -translate-y-1/2 bg-bg px-2 sm:-ml-3 sm:px-3">
+                <EmailLink />
+              </div>
+              <ContactForm email={site.email} />
             </div>
-            <ContactForm email={site.email} />
-          </div>
+            <noscript>
+              <div className="@container mt-8">
+                <EmailLink />
+              </div>
+            </noscript>
+          </>
         ) : (
           <div className="@container mt-8">
             <EmailLink />

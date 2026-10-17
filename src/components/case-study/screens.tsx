@@ -17,7 +17,7 @@ const COLUMNS = {
 
 export function Screens({ items, columns = 3, wide = false }: ScreensProps) {
   return (
-    <ul className={cx("mt-8 grid gap-4", COLUMNS[columns])}>
+    <ul className={cx("mt-8 grid grid-cols-2 gap-4", COLUMNS[columns])}>
       {items.map((screen) => (
         <li key={screen.src} className="flex flex-col gap-2">
           <div

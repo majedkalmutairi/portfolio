@@ -33,7 +33,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <ThemeScript />
         <IntroScript />
         <noscript>
-          <style>{`[data-reveal]{opacity:1!important;transform:none!important}`}</style>
+          <style>{`[data-reveal]{opacity:1!important;transform:none!important}#contact-frame{display:none}`}</style>
         </noscript>
       </head>
       <body className="flex min-h-dvh flex-col bg-bg text-fg antialiased">
