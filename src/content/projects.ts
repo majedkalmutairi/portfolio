@@ -33,7 +33,7 @@ export const projects: Project[] = [
   {
     slug: "motorized-chainsaw-prop",
     name: "Motorized Chainsaw Prop",
-    hook: "A wearable chainsaw prop with a motor-driven belt of teeth that really runs.",
+    hook: "A chainsaw prop with a motor-driven belt of teeth that really runs.",
     status: "built",
     role: "Design, 3D printing, electronics and code",
     tech: ["arduino", "cpp", "soldering"],
