@@ -11,7 +11,7 @@ export const site = {
   availability: "June – September 2027",
   graduation: "Expected 2028",
   gpa: { value: "3.97", scale: "4.0" },
-  photo: undefined as { src: string; alt: string } | undefined,
+  photo: { src: "/me.jpg", alt: "Majed Almutairi" } as { src: string; alt: string } | undefined,
   resume: undefined as string | undefined,
   resumeNote: "Resume coming soon." as string | undefined,
   about:
