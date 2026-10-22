@@ -2,8 +2,11 @@
 
 import { useEffect, useRef, useState } from "react";
 import { Pause, Play } from "lucide-react";
+import { cx } from "@/lib/cx";
 
-export function LoopVideo({ src, poster, label }: { src: string; poster: string; label: string }) {
+type LoopVideoProps = { src: string; poster: string; label: string; fit?: "cover" | "contain" };
+
+export function LoopVideo({ src, poster, label, fit = "cover" }: LoopVideoProps) {
   const ref = useRef<HTMLVideoElement>(null);
   const [playing, setPlaying] = useState(false);
 
@@ -40,7 +43,7 @@ export function LoopVideo({ src, poster, label }: { src: string; poster: string;
         preload="metadata"
         onPlay={() => setPlaying(true)}
         onPause={() => setPlaying(false)}
-        className="absolute inset-0 size-full object-cover"
+        className={cx("absolute inset-0 size-full", fit === "contain" ? "object-contain" : "object-cover")}
       />
       <button
         type="button"

@@ -5,14 +5,15 @@ type VideoProps = {
   poster: string;
   label: string;
   captions?: string[];
+  aspect?: string;
 };
 
-export function Video({ src, poster, label, captions }: VideoProps) {
+export function Video({ src, poster, label, captions, aspect = "16 / 9" }: VideoProps) {
   return (
     <figure
       className={cx("mt-8 grid gap-4", captions?.length ? "sm:grid-cols-[1fr_12rem] sm:gap-6" : undefined)}
     >
-      <div className="overflow-hidden rounded-lg border border-dashed border-line bg-surface">
+      <div className="self-start overflow-hidden rounded-lg border border-dashed border-line bg-surface">
         <video
           src={src}
           poster={poster}
@@ -21,7 +22,8 @@ export function Video({ src, poster, label, captions }: VideoProps) {
           muted
           playsInline
           preload="metadata"
-          className="block aspect-video w-full"
+          className="block w-full"
+          style={{ aspectRatio: aspect }}
         />
       </div>
       {captions?.length ? (

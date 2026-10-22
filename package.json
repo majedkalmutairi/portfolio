@@ -25,6 +25,7 @@
     "next": "^16.3.8",
     "react": "19.2.8",
     "react-dom": "19.2.8",
+    "remark-gfm": "^4.0.1",
     "simple-icons": "^16.32.0"
   },
   "devDependencies": {

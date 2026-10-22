@@ -33,18 +33,30 @@ export function ProjectCard({
   );
 }
 
+const FEATURED_MEDIA =
+  "relative aspect-4/3 border-b border-dashed border-line bg-surface sm:aspect-auto sm:min-h-75 sm:border-r sm:border-b-0";
+
 function Featured({ project, href, className }: CardProps) {
-  const { image } = project;
+  const { image, video } = project;
   return (
     <DashedCard
       className={cx(
         "overflow-hidden transition-colors duration-150 hover:bg-hover",
-        image && "sm:grid sm:grid-cols-[45%_1fr]",
+        (video || image) && "sm:grid sm:grid-cols-[45%_1fr]",
         className,
       )}
     >
-      {image ? (
-        <div className="relative aspect-4/3 border-b border-dashed border-line bg-surface sm:aspect-auto sm:min-h-75 sm:border-r sm:border-b-0">
+      {video ? (
+        <div className={FEATURED_MEDIA} style={{ backgroundColor: video.background }}>
+          <LoopVideo
+            src={video.src}
+            poster={video.poster}
+            label={video.alt}
+            fit={video.background ? "contain" : "cover"}
+          />
+        </div>
+      ) : image ? (
+        <div className={FEATURED_MEDIA}>
           <Image
             src={image.src}
             alt={image.alt}

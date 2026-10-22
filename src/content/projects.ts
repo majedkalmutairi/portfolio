@@ -12,7 +12,7 @@ export type Project = {
   tech: TechId[];
   image?: { src: string; alt: string };
   screens?: { src: string; alt: string }[];
-  video?: { src: string; poster: string; alt: string };
+  video?: { src: string; poster: string; alt: string; background?: string };
   links: { source?: string; live?: string };
   featured: boolean;
   caseStudy?: boolean;
@@ -20,13 +20,19 @@ export type Project = {
 
 export const projects: Project[] = [
   {
-    slug: "parking-system",
-    name: "Arduino Parking Occupancy System",
-    hook: "Tells drivers whether there's a free spot before they enter the lot.",
-    status: "built",
-    role: "Idea, wiring, code, build and presentation",
-    tech: ["arduino", "cpp", "breadboard", "sensors"],
-    links: {},
+    slug: "autoracer",
+    name: "AutoRacer",
+    hook: "A 1/10 scale RC car that learns to race by itself.",
+    status: "in-progress",
+    role: "Idea, simulator, driving logic and the plan for the real car",
+    tech: ["python", "pygame", "linux"],
+    video: {
+      src: "/projects/autoracer/card-loop.mp4",
+      poster: "/projects/autoracer/card-poster.webp",
+      alt: "The AutoRacer simulator: the car lapping the speedway track on the racing line it learned, coloured by speed.",
+      background: "#0e1013",
+    },
+    links: { source: "https://github.com/majedkalmutairi/racecar" },
     featured: true,
     caseStudy: true,
   },
@@ -67,6 +73,17 @@ export const projects: Project[] = [
         alt: "Dosey's History screen: 81% of doses taken over seven days, missed doses marked on each day.",
       },
     ],
+    links: {},
+    featured: false,
+    caseStudy: true,
+  },
+  {
+    slug: "parking-system",
+    name: "Arduino Parking Occupancy System",
+    hook: "Tells drivers whether there's a free spot before they enter the lot.",
+    status: "built",
+    role: "Idea, wiring, code, build and presentation",
+    tech: ["arduino", "cpp", "breadboard", "sensors"],
     links: {},
     featured: false,
     caseStudy: true,

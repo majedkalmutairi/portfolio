@@ -1,0 +1,131 @@
+You put it on a track it has never seen and it drives one slow lap to map it, then goes faster every lap after that. If I move the walls around, it notices and starts over from the slow lap.
+
+The only sensor is a 2D lidar, and all the compute is on the car (Jetson Orin Nano).
+
+The plan is to write a small 2D simulator first, get everything working there, and then run the same code on the real car. The simulator part is done. I'm ordering the parts for the car now, see the [shopping list](https://github.com/majedkalmutairi/racecar/blob/main/shopping-list.md).
+
+<Video
+  src="/projects/autoracer/dashboard.mp4"
+  poster="/projects/autoracer/dashboard-poster.webp"
+  aspect="728 / 380"
+  label="The simulator dashboard: the car racing the speedway track on the line it learned, with lap times, speed, what it has learned and the safety reflex in the panel on the right."
+  captions={[
+    "The window shows the track on the left and a panel on the right. The panel reads the car's state and never changes how it drives.",
+    "The white line is where the car actually drove over the last lap, the cyan line ahead of the car is the path the reflex is checking, and the yellow dot is where pure pursuit is aiming.",
+    "The car turns orange while its tyres slide and gets a red ring while the reflex brakes.",
+  ]}
+/>
+
+## How it drives
+
+Every frame the mode manager reads the lidar, the pose and the speed through one small interface (`CarInterface`: `get_scan`, `get_pose`, `get_speed`, `set_drive`) and decides what to do.
+
+1. EXPLORE. The car drives at 0.8 m/s and counts every lidar hit into an occupancy grid. On a narrow track it stays centred between the walls. Where the track is wide it follows the gap: every near edge in the scan is widened by half the car, and it aims at the deepest direction left. A box in its path with room on both sides gets the smallest sidestep that clears it, and the car never picks a turn that would swing its side into something. A lap ends when the car crosses a finish line drawn through its start, so a wide line round the start still counts.
+2. PLAN, once the lap is done. The explore path is slid toward the middle of the track (the ridge of the distance transform) to get the centerline. Every point moves only inside its own free stretch and neighbours are pulled together, so near a box the centerline ramps smoothly round it. Then the car solves for the racing line that bends least while keeping 0.35 m from every wall and box (one bounded least-squares problem) and builds a speed profile from grip with `v = sqrt(grip * R)`. Braking and accelerating only get the grip a corner leaves over (friction ellipse).
+3. RACE. Pure pursuit on the racing line. In bends the lookahead shrinks so the car cuts a corner by at most 10 cm, and it asks for the planned speed a moment early because the speed controller lags.
+4. Learning happens after every race lap. The line is cut into sections about 0.4 m long (at least 60). Each one has a speed multiplier (the grip that section trusts, rebuilt into the speed profile) and a confidence, which is its clean laps in a row. Multipliers start at 0.6. A clean lap raises a section by 5 % times its confidence, up to 15 %. If the car slid there, left the line by more than 0.12 m or needed the reflex, the section drops 10 % (25 % after a crash), its confidence resets, and that speed becomes a ceiling it stays just under, trying 6 % past it after two clean laps. The car spots a slide when it turns less than its steering asked for. On the real car the IMU can measure the same thing.
+5. The safety reflex runs in every mode, after the controller. While the car follows its plan, the reflex runs pure pursuit forward on the bicycle model to see where the car will really go. If a lidar hit lies on that path less than 0.6 s away, it slows down to keep it 0.6 s away. Off the plan it predicts the shape the body sweeps along the current steering arc instead, and if that path is blocked it heads for the widest gap. This is the part that becomes a C++ node on the real car.
+6. TRACK_CHANGED. While racing, if more than 35 % of the beams land where the map has no wall for 2 s, the car throws away the map, the plan and the multipliers and explores again from wherever it is.
+7. Reverse recovery also runs in every mode. If the car wants to drive but hasn't moved for 1 s (usually because the reflex parked it nose-in against something), it backs up 0.5 m with the wheels turned away from the way out and tries again. The lidar can't see straight behind, so each back-up is checked against the map built so far. After three tries at the same spot it stops and reports STUCK.
+
+A box that is on the track during the explore lap is just more wall: it ends up in the map and the plan goes around it. A box dropped after planning is caught by the reflex and mapped while racing, and within a second the racing line is rebuilt to go round one side of it. The centerline stays as it was.
+
+Nothing in `racer/mapping`, `planning`, `control`, `learning`, `safety` or `modes` imports pygame, so the same code will run on the car with a `RosCar` behind the interface.
+
+## Results (simulation)
+
+The tracks are as big as a 12 m lidar sensibly allows: 25 x 17.5 m and 30 x 20 m, laps of 49 to 101 m, and widths that change along the lap between about 1 and 3 m. The sim car has a grip limit of about 0.8 g and a top speed of 12 m/s (stopping from 12 m/s takes 12 m, the lidar's range), so the speed it learns is set by the tyres.
+
+15 laps on each of the seven tracks, three lidar-noise seeds each, with lap 1 as the explore lap. No run crashed.
+
+| track    | explore lap | first race lap | best lap |
+| -------- | ----------: | -------------: | -------: |
+| oval     |        60 s |         12.8 s |    6.8 s |
+| hairpin  |        60 s |         16.1 s |    7.2 s |
+| chicane  |        65 s |         14.4 s |    7.5 s |
+| twisty   |        85 s |         25.5 s |   12.1 s |
+| snake    |        88 s |         26.3 s |   12.9 s |
+| speedway |        82 s |         20.9 s |   10.0 s |
+| circuit  |       122 s |         42.4 s |   19.5 s |
+
+<Figure
+  src="/projects/autoracer/laptime_all_tracks.png"
+  alt="Lap time against lap number for all seven tracks: every line drops steeply over the first race laps and flattens by about lap seven."
+  width={1650}
+  height={600}
+/>
+
+By lap 15 every track is down to about half its first race lap, and each gets within 5 % of its best after about seven race laps. On the straights the car reaches 10 to 10.6 m/s, the fastest it can go and still brake for the next corner. The same tracks also finish without a crash with a box on each, with a box dropped in front of the car mid-race, and over 30 laps.
+
+When the oval is swapped for the chicane under the car at lap 8, it notices the mismatch within 2 s, explores again and learns the new track.
+
+<Figure
+  src="/projects/autoracer/track_change.png"
+  alt="Lap times across the track swap: the oval race laps get faster, the swap after lap 8 forces one slow explore lap on the chicane, then the chicane race laps get faster too."
+  width={900}
+  height={600}
+/>
+
+More numbers, a learning curve and the learned multipliers for every track, and the obstacle runs are in [docs/results_sim.md](https://github.com/majedkalmutairi/racecar/blob/main/docs/results_sim.md).
+
+## Random tracks
+
+`--random` builds a new track from a seed and drives it. Easy tracks have a few big sweeping corners, and medium ones are tighter and narrower. Hard ones follow the outline of a random blob of grid cells, which gives L, U and S shapes with 1.0 to 1.2 m corners. The width wanders along the lap: 1.0 to 2.0 m on hard tracks, up to 3.0 m on easy ones. There are four sizes, from 8 x 6 m up to `xl` at 30 x 20 m (laps of 50 to 90 m). Boxes come three ways: placed before the explore lap, dropped mid-race (only once the car could still stop for them), or set out as a slalom.
+
+Every candidate track is checked before it's used: corner radius, gaps between passes, room next to every box, what a dropped box does to the change detector, and a run of the real planner on the true walls. Between a third and nine tenths of candidates pass, and the generator just tries the next one.
+
+<Figure
+  src="/projects/autoracer/bench_gallery.png"
+  alt="Twelve random tracks, four each of easy, medium and hard, with the known, dropped and slalom boxes marked in red, orange and purple."
+  width={1680}
+  height={983}
+/>
+
+10 laps on each track, all three kinds of boxes:
+
+| size   | tracks | finished | crashes |
+| ------ | -----: | -------: | ------: |
+| medium |     90 |       89 |       0 |
+| large  |     90 |       90 |       0 |
+| xl     |     60 |       57 |       0 |
+
+On every track it finished, the best lap is faster than the first race lap, by 45 to 48 % on average. The four that didn't finish all stopped on the slow first lap, where the car reached the corner of a slalom box at a slight angle and couldn't back out of it in three tries.
+
+<Figure
+  src="/projects/autoracer/bench_improvement.png"
+  alt="Best lap against first race lap for every random track, coloured easy, medium and hard: every dot sits well below the no-improvement line."
+  width={600}
+  height={600}
+/>
+
+## Tracks
+
+Seven hand-made tracks live in `tools/make_tracks.py`. The first five are the original small tracks drawn 2.5 times bigger (25 x 17.5 m) and the last two are new (30 x 20 m). The width changes along every lap.
+
+<Figure
+  src="/projects/autoracer/tracks.png"
+  alt="The seven hand-made tracks with their lengths and widths: oval, hairpin, chicane, twisty, snake, speedway and circuit."
+  width={1600}
+  height={720}
+/>
+
+- `oval` (52 m, 1.6 to 2.9 m wide): no straights and no tight corners, so the car can keep its speed up all the way round. The track swap test starts here.
+- `hairpin` (49 m): a teardrop. Two long straights meet in one tight U-turn at the narrow end, so this one is about braking hard and late.
+- `chicane` (52 m): an oval with an S-bend pushed into the top straight. The car has to change direction quickly at speed.
+- `twisty` (71 m, nine corners): a deep pocket cut into the top and a long diagonal on the left, with most of its right angles close together.
+- `snake` (73 m): three hairpins in a row, down, up and down again through an upside-down U.
+- `speedway` (70 m, up to 3 m wide): two long straights and a V dipping into the top one. The car gets closest to its top speed here.
+- `circuit` (101 m, 1.0 to 2.3 m wide, sixteen corners): the longest and hardest track, with a narrow slot, U-turns, S-bends and two fast straights.
+
+Every run saves its map and plan. This is the circuit after 15 laps: the black dots are the walls as the lidar saw them, grey is where the car drove on the explore lap, blue is the centerline, and the racing line is coloured by the speed it learned. The chart under it compares the speed planned for the first race lap with the speed learned since. The other tracks are in [docs/results_sim.md](https://github.com/majedkalmutairi/racecar/blob/main/docs/results_sim.md).
+
+<Figure
+  src="/projects/autoracer/plan_circuit.png"
+  alt="The circuit after 15 laps: the mapped walls, the explore path, the centerline and the racing line coloured by learned speed, with the planned and learned speed profiles plotted below."
+  width={1100}
+  height={1100}
+/>
+
+## What's next
+
+The same code goes onto a Traxxas Slash with a Jetson Orin Nano, an LD19 lidar and ROS 2.
